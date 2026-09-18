@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  /* Kira brand palette: near-black neutrals + a single electric-blue accent */
+  --color-navy-950: #08090b;
+  --color-navy-900: #0d0e12;
+  --color-navy-800: #131419;
+  --color-navy-700: #1c1e26;
+  --color-navy-600: #26282f;
+  --color-navy-500: #34363f;
+
+  --color-electric-400: #5ee1ff;
+  --color-electric-500: #2f9bff;
+  --color-electric-600: #2563ff;
+  --color-electric-700: #1746c9;
+
+  --color-ink-100: #f4f4f5;
+  --color-ink-300: #a1a1aa;
+  --color-ink-500: #71717a;
+
+  --animate-marquee: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-navy-950);
+  color: var(--color-ink-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-electric-600);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-navy-500);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-electric-700);
+}
+
+@layer utilities {
+  /* Flat surfaces: thin border, solid fill, no blur/glow — the whole point is restraint. */
+  .surface {
+    background: var(--color-navy-900);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .surface-hover {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .surface-hover:hover {
+    background: var(--color-navy-800);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--color-electric-400);
+    outline-offset: 3px;
+  }
+
+  .input {
+    width: 100%;
+    border-radius: 0.625rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--color-navy-800);
+    padding: 0.7rem 0.9rem;
+    font-size: 0.875rem;
+    color: white;
+    transition: border-color 0.2s ease;
+  }
+  .input::placeholder {
+    color: var(--color-ink-500);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--color-electric-400);
+  }
+}
