@@ -4,42 +4,56 @@
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
 
-  /* Kira brand palette: near-black neutrals + a single electric-blue accent */
-  --color-navy-950: #08090b;
-  --color-navy-900: #0d0e12;
-  --color-navy-800: #131419;
-  --color-navy-700: #1c1e26;
-  --color-navy-600: #26282f;
-  --color-navy-500: #34363f;
+  /* KiraTech palette: airy light surfaces, ink text, one electric-blue accent */
+  --color-canvas: #f6f8fc;
+  --color-surface: #ffffff;
+  --color-muted: #eef2f8;
 
-  --color-electric-400: #5ee1ff;
-  --color-electric-500: #2f9bff;
-  --color-electric-600: #2563ff;
+  --color-ink-950: #0b1220; /* headings */
+  --color-ink-800: #1f2937; /* strong body */
+  --color-ink-600: #4a5468; /* body copy on canvas: 7.3:1 */
+  --color-ink-500: #5d6678; /* secondary copy on canvas: 5.3:1 */
+
+  --color-accent: #1e5af0; /* accent text/icons on canvas: 5.1:1 */
+  --color-electric-600: #2563ff; /* button fill; white text 4.9:1 */
   --color-electric-700: #1746c9;
 
-  --color-ink-100: #f4f4f5;
-  --color-ink-300: #a1a1aa;
-  --color-ink-500: #71717a;
+  --color-success: #15803d;
+  --color-danger: #c42b2b;
 
-  --animate-marquee: marquee 32s linear infinite;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+/* ---------------------------------------------------------------- base */
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* keeps anchor targets clear of the fixed header */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  background: var(--color-navy-950);
-  color: var(--color-ink-100);
+  background: var(--color-canvas);
+  color: var(--color-ink-800);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Soft colour washes behind everything — gives the glass surfaces something
+   to frost. Fixed pseudo-element instead of background-attachment, which iOS ignores. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 30rem at 85% -5%, rgb(37 99 255 / 0.22), transparent 70%),
+    radial-gradient(36rem 28rem at -5% 35%, rgb(56 189 248 / 0.2), transparent 70%),
+    radial-gradient(40rem 30rem at 70% 105%, rgb(129 140 248 / 0.18), transparent 70%);
 }
 
 ::selection {
@@ -47,58 +61,318 @@ body {
   color: #fff;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
+/* One focus style for every interactive element. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
-::-webkit-scrollbar-track {
-  background: var(--color-navy-950);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-navy-500);
-  border-radius: 999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-electric-700);
+#main-content:focus {
+  outline: none;
 }
 
-@layer utilities {
-  /* Flat surfaces: thin border, solid fill, no blur/glow — the whole point is restraint. */
-  .surface {
-    background: var(--color-navy-900);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+img,
+svg {
+  max-width: 100%;
+}
+
+/* ---------------------------------------------------------------- components */
+
+@layer components {
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.25rem;
+    height: 1px;
+    background: currentColor;
   }
 
-  .surface-hover {
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+  .display-1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    font-size: clamp(2.5rem, 1.6rem + 4.2vw, 5rem);
+    text-wrap: balance;
   }
-  .surface-hover:hover {
-    background: var(--color-navy-800);
-    border-color: rgba(255, 255, 255, 0.16);
+  .display-2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    font-size: clamp(2rem, 1.5rem + 2.2vw, 3.25rem);
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.65;
+    color: var(--color-ink-600);
+    text-wrap: pretty;
   }
 
-  .focus-ring {
-    outline: none;
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.875rem; /* 46px tap target */
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s var(--ease-out-expo);
   }
-  .focus-ring:focus-visible {
-    outline: 2px solid var(--color-electric-400);
-    outline-offset: 3px;
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .btn:hover svg.arrow {
+    transform: translateX(3px);
+  }
+  .btn-primary {
+    background: var(--color-electric-600);
+    color: #fff;
+    box-shadow: 0 1px 2px rgb(23 70 201 / 0.2), 0 8px 20px -8px rgb(37 99 255 / 0.55);
+  }
+  .btn-primary:hover {
+    background: var(--color-electric-700);
+  }
+  .btn-secondary {
+    border: 1px solid rgb(11 18 32 / 0.1);
+    background: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-ink-950);
+  }
+  .btn-secondary:hover {
+    border-color: rgb(11 18 32 / 0.2);
+    background: rgb(255 255 255 / 0.9);
+  }
+  .btn-lg {
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    font-size: 1rem;
   }
 
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+  .text-link svg {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .text-link:hover svg,
+  .group:hover .text-link svg {
+    transform: translateX(3px);
+  }
+
+  /* Frosted glass: translucent fill, blur, a bright top edge and a soft shadow. */
+  .card {
+    background: rgb(255 255 255 / 0.55);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    border-radius: 1.25rem;
+    box-shadow:
+      0 0 0 1px rgb(11 18 32 / 0.04),
+      0 1px 2px rgb(11 18 32 / 0.04),
+      0 16px 40px -20px rgb(11 18 32 / 0.18);
+  }
+  .card-interactive {
+    transition: background-color 0.25s ease, box-shadow 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+  }
+  .card-interactive:hover {
+    background: rgb(255 255 255 / 0.8);
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgb(11 18 32 / 0.05),
+      0 2px 4px rgb(11 18 32 / 0.04),
+      0 24px 48px -20px rgb(37 99 255 / 0.25);
+  }
+  .glass {
+    background: rgb(255 255 255 / 0.65);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  }
+
+  .section {
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8rem);
+  }
+
+  /* Faint engineering grid used behind heroes. */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(11 18 32 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(11 18 32 / 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);
+  }
+
+  /* Form controls */
+  .field-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-950);
+  }
   .input {
     width: 100%;
-    border-radius: 0.625rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: var(--color-navy-800);
-    padding: 0.7rem 0.9rem;
-    font-size: 0.875rem;
-    color: white;
-    transition: border-color 0.2s ease;
+    min-height: 3rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(11 18 32 / 0.12);
+    background: rgb(255 255 255 / 0.75);
+    padding: 0.75rem 0.95rem;
+    font-size: 1rem; /* 16px prevents iOS zoom-on-focus */
+    color: var(--color-ink-950);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .input::placeholder {
     color: var(--color-ink-500);
   }
+  .input:hover {
+    border-color: rgb(11 18 32 / 0.22);
+  }
   .input:focus {
     outline: none;
-    border-color: var(--color-electric-400);
+    background: #fff;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px rgb(30 90 240 / 0.14);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+  .input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 4px rgb(196 43 43 / 0.14);
+  }
+  select.input {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5468' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 1rem;
+  }
+  select.input option {
+    background: #fff;
+  }
+
+  /* Long-form text (legal pages) */
+  .prose-kira {
+    max-width: 44rem;
+    color: var(--color-ink-600);
+    line-height: 1.75;
+  }
+  .prose-kira h2 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink-950);
+  }
+  .prose-kira p,
+  .prose-kira ul {
+    margin-top: 1rem;
+  }
+  .prose-kira ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-kira li + li {
+    margin-top: 0.5rem;
+  }
+  .prose-kira a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* ---------------------------------------------------------------- motion */
+
+/* Above-the-fold entrance; pure CSS so it runs before/without JS. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 0.8s var(--ease-out-expo) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.page-in {
+  animation: page-in 0.35s ease both;
+}
+
+/* Scroll reveal. Only hides content when JS is running (the `js` class is set
+   inline in index.html), so content is never lost without JavaScript. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+  transition-delay: var(--delay, 0ms);
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Signal travelling down the hero system diagram. */
+@keyframes signal {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.signal {
+  animation: signal 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js [data-reveal] {
+    transform: none;
+  }
+  .signal {
+    display: none;
   }
 }

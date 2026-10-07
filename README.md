@@ -1,101 +1,102 @@
-# Kira Computer Services — Website
+# KiraTech — Website
 
-A modern, production-ready marketing website for Kira Computer Services, built with
-**React + Vite + Tailwind CSS**, animated with **Framer Motion**, and backed by
-**Supabase** for dynamic content (portfolio projects) and lead capture (quote requests).
-
-## Stack
-
-- **React 19 + Vite** — app shell and build tooling
-- **Tailwind CSS v4** — styling, via the `@tailwindcss/vite` plugin
-- **Framer Motion** — scroll reveals and micro-interactions
-- **lucide-react** — icon set
-- **react-helmet-async** — per-page SEO/meta tags
-- **@supabase/supabase-js** — database + storage client
+Marketing website for KiraTech (Nairobi, Kenya), built with **React 19 + Vite + Tailwind CSS v4**.
+Every page is **prerendered to static HTML** at build time, so search engines and link previews get
+real content and metadata, and the site works on any static host.
 
 ## Getting started
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in your Supabase credentials
-npm run dev
+npm run dev       # local dev server
+npm run build     # production build + prerender → dist/
+npm run preview   # serve dist/ locally (use trailing-slash URLs, e.g. /about/)
+npm run lint      # oxlint
+npm run check     # contact-form validation checks
 ```
 
-The site runs fully without Supabase configured — it falls back to the static content
-in `src/data/content.js` and the quote form logs submissions to the console instead of
-persisting them. This makes local development and design review possible before a
-Supabase project exists.
+## Editing content
 
-## Connecting Supabase
+All copy lives in **`src/data/content.js`** — contact details, services, principles, process,
+technology, About-page story/team and case studies. Components read from it, so most changes need
+no component edits.
 
-1. Create a project at [supabase.com](https://supabase.com).
-2. In the SQL editor, run `supabase/schema.sql`. This creates:
-   - `public.projects` — portfolio items rendered in the "Work" section, with row-level
-     security allowing public reads and restricting writes to authenticated users.
-   - `public.quote_requests` — leads captured from the "Request a Quote" form, insert-only
-     for anonymous visitors, readable only by authenticated staff.
-   - A public `kira-media` storage bucket for portfolio images and other site assets.
-   - Seed rows matching the static fallback content, so the DB and UI agree from day one.
-3. Copy your project URL and anon public key (Project Settings → API) into `.env.local`:
+The rule for that file: **only state things that are true.** Sections for real information that
+doesn't exist yet render nothing until you add it:
 
-   ```
-   VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-public-key
-   VITE_SUPABASE_MEDIA_BUCKET=kira-media
-   ```
+| Add to…            | …and this appears                                         |
+| ------------------ | --------------------------------------------------------- |
+| `projects`         | “Work” in the nav and footer, homepage work section, `/work/<slug>` case-study pages, sitemap |
+| `about.story`      | Replaces the default “Our approach” copy on `/about`       |
+| `about.team`       | Team section on `/about`                                  |
+| `socialLinks`      | Social icons in the footer (real accounts only)           |
 
-4. Restart the dev server. Portfolio projects will now load from Supabase, and quote
-   submissions will be written to `quote_requests`.
+Adding a service to `services` automatically creates `/services/<slug>`, adds it to the
+navigation, footer, contact-form subjects and sitemap.
 
-Never commit `.env.local` — it's already ignored via the `*.local` rule in `.gitignore`.
+## Contact form
 
-## Project structure
+`src/lib/enquiry.js` holds validation and submission.
+
+- **Supabase configured** → enquiries are inserted into `quote_requests`.
+- **Not configured** → the form opens the visitor's email app with the message pre-filled to
+  `shamisi@kiratech.co.ke`, and tells them to press send. Nothing is faked.
+
+To use another backend (email API, serverless function, CRM), replace `submitEnquiry()` — the form
+only depends on its `{ ok, via }` result.
+
+## Supabase (optional)
+
+1. Create a project at [supabase.com](https://supabase.com) and run `supabase/schema.sql`.
+2. Copy `.env.example` to `.env.local` and add the project URL and **anon** key.
+3. Rebuild.
+
+The anon key is public by design; Row Level Security limits it to reading projects and inserting
+enquiries. Read enquiries in the Supabase dashboard. **Never put the service-role key in a
+`VITE_` variable** — anything prefixed `VITE_` ships to the browser.
+
+If you set up Supabase from an earlier version of this repo, run the `upgrade` statements in
+`schema.sql`: earlier policies let *any* signed-up user read enquiries and edit projects.
+
+## Deployment
+
+Upload `dist/` to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages, nginx…).
+
+- Each route is a folder with its own `index.html` (`/services/` → `dist/services/index.html`).
+- `dist/404.html` is served for unknown URLs by most hosts automatically. On nginx, use
+  `try_files $uri $uri/ /404.html;`.
+- `sitemap.xml` and `robots.txt` are generated on build from `siteInfo.url` in `content.js`
+  (currently `https://kiratech.co.ke` — change it if the site lives elsewhere).
+
+## Structure
 
 ```
 src/
+  data/content.js        All site copy (single source of truth)
+  pages/                 One component per route
   components/
-    ui/            Reusable primitives (Reveal, Container, SectionHeading)
-    sections/       One component per page section (Hero, About, Services, ...)
-    Navbar.jsx
-    Footer.jsx
-  data/
-    content.js      Static fallback content — mirrors the Supabase table shape
+    sections/            Homepage sections
+    ui/                  Shared building blocks (PageHeader, Reveal, CtaBand, Seo, Logo…)
+    Navbar.jsx, Footer.jsx, ContactForm.jsx
   lib/
-    supabaseClient.js     Supabase client + config guard
-    useProjects.js        Hook: loads portfolio projects (Supabase, falls back to static)
-    submitQuoteRequest.js Writes a quote request lead to Supabase
-supabase/
-  schema.sql        Full schema, RLS policies, storage bucket, and seed data
-```
-
-Adding a new dynamic section later means following the same pattern: add a table to
-`supabase/schema.sql`, add matching fallback data to `src/data/content.js`, and add a
-small hook in `src/lib/` that prefers Supabase and falls back to the static data.
-
-## Scripts
-
-```bash
-npm run dev       # start local dev server
-npm run build     # production build to dist/
-npm run preview   # preview the production build locally
-npm run lint       # oxlint
+    router.jsx           Minimal History-API router + <Link>
+    enquiry.js           Contact-form validation and submission
+    useProjects.js       Case studies (Supabase, falling back to content.js)
+    structuredData.js    JSON-LD helpers
+  routes.js              Routes that are prerendered / listed in the sitemap
+  entry-server.jsx       Server render entry used by the prerender step
+scripts/prerender.js     Writes static HTML per route, 404.html, sitemap.xml, robots.txt
 ```
 
 ## Design system
 
-- Palette: deep navy (`navy-950`…`navy-500`) with an electric blue accent
-  (`electric-400`…`electric-700`), defined as Tailwind v4 theme tokens in `src/index.css`.
-- Typography: Inter (body) and Space Grotesk (display/headings), loaded via Google Fonts.
-- Glassmorphism: `.glass` utility class for translucent, blurred panels (nav, cards, form).
-- Motion: `Reveal` (`src/components/ui/Reveal.jsx`) wraps content in a scroll-triggered
-  fade/slide using Framer Motion's `whileInView`, animating once per element.
+Defined in `src/index.css`:
 
-## Accessibility & SEO
-
-- Semantic landmarks (`header`, `main`, `footer`, `nav`), skip-to-content link, and visible
-  focus rings (`.focus-ring`) throughout.
-- All imagery includes descriptive `alt` text.
-- Per-page `<title>`, meta description, Open Graph/Twitter tags, and JSON-LD Organization
-  markup via `react-helmet-async` in `src/App.jsx`.
-- `public/robots.txt` and `public/sitemap.xml` included — update the sitemap domain once
-  the site has a production URL.
+- **Colour:** near-black navy neutrals with a single electric-blue accent. Text and button colours
+  meet WCAG AA contrast.
+- **Type:** Space Grotesk (display) and Inter (body). Fluid `display-1` / `display-2` / `lede` scale.
+- **Components:** `.btn` (+ `btn-primary`, `btn-secondary`, `btn-light`, `btn-lg`), `.card`,
+  `.eyebrow`, `.text-link`, `.input`, `.section`, `.prose-kira`.
+- **Motion:** CSS-only entrance and scroll reveals (`Reveal`). Content is never hidden without
+  JavaScript, and everything respects `prefers-reduced-motion`.
+- **Focus:** one consistent `:focus-visible` outline for every interactive element.

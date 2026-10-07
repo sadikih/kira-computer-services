@@ -1,200 +1,312 @@
-// Static fallback content. This mirrors the shape of data we expect to read
-// from Supabase (see supabase/schema.sql) so the site renders fully even
-// before a Supabase project is connected, and components don't need to
-// change shape once dynamic content is wired in.
+// Single source of truth for site copy. Everything rendered on the site comes
+// from here (or from Supabase, for projects), so real information can be added
+// later without touching components.
+//
+// Rule for this file: only state things that are true. No invented clients,
+// statistics, testimonials or history — leave an empty array instead and the
+// matching section hides itself.
 
 export const siteInfo = {
-  name: 'Kira Computer Services',
-  shortName: 'Kira',
-  tagline: 'Engineering the software behind Africa’s next generation of technology companies.',
+  name: 'KiraTech',
+  legalName: 'KiraTech',
+  // Assumed from the email domain — change if the site is served elsewhere.
+  url: 'https://kiratech.co.ke',
+  tagline: 'Software, security and networks for organisations in Kenya.',
   description:
-    'Kira Computer Services designs and builds software, websites, digital platforms, and custom technology solutions for ambitious businesses.',
-  email: 'hello@kiracomputerservices.com',
-  phone: '+255 700 000 000',
-  location: 'Dar es Salaam, Tanzania',
-  addressLine: 'Kinondoni, Dar es Salaam, Tanzania',
+    'KiraTech is a Nairobi technology company. We build software and websites, carry out authorised security testing, and design the networks and cloud infrastructure your systems run on.',
+  email: 'shamisi@kiratech.co.ke',
+  phone: '0112796092',
+  phoneHref: 'tel:+254112796092',
+  location: 'Nairobi, Kenya',
 }
 
+// Primary navigation. `Work` is added automatically once projects exist
+// (see src/lib/useProjects.js).
 export const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Work', href: '#work' },
-  { label: 'Why Kira', href: '#why-kira' },
-  { label: 'Stack', href: '#stack' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Services', href: '/services' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ]
 
-export const socialLinks = [
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: 'linkedin' },
-  { label: 'X (Twitter)', href: 'https://x.com', icon: 'twitter' },
-  { label: 'GitHub', href: 'https://github.com', icon: 'github' },
-  { label: 'Instagram', href: 'https://instagram.com', icon: 'instagram' },
+// Only add accounts that actually exist, e.g.
+// { label: 'LinkedIn', href: 'https://www.linkedin.com/company/…', icon: 'linkedin' }
+// Supported icons: linkedin, twitter, github, instagram.
+export const socialLinks = []
+
+// The three things KiraTech does, used for positioning on the homepage.
+export const pillars = [
+  {
+    key: 'build',
+    title: 'Build',
+    description: 'Custom software, websites and web applications designed around how your organisation works.',
+  },
+  {
+    key: 'secure',
+    title: 'Secure',
+    description: 'Authorised security testing and hardening, so weaknesses are found by us before someone else finds them.',
+  },
+  {
+    key: 'connect',
+    title: 'Connect',
+    description: 'Office networks, cloud hosting and IT infrastructure that keep your people and systems online.',
+  },
 ]
 
-export const heroStats = [
-  { value: '40+', label: 'Products shipped' },
-  { value: '98%', label: 'Client retention' },
-  { value: '24/7', label: 'Systems monitoring' },
-]
-
-export const aboutStats = [
-  { value: '6+', label: 'Years building software' },
-  { value: '40+', label: 'Projects delivered' },
-  { value: '15+', label: 'Industries served' },
-  { value: '10+', label: 'Engineers & designers' },
-]
-
+// Services. `slug` becomes /services/<slug>. Each entry answers: what it is,
+// the problem it solves, why it matters, what is included, who it suits.
 export const services = [
   {
     slug: 'software-development',
-    icon: 'code-2',
+    icon: 'code',
+    pillar: 'build',
     title: 'Software Development',
-    description:
-      'Custom software engineered around your workflows — from internal tools to full-scale enterprise platforms, built to scale with your business.',
-    points: ['Custom platforms', 'API design & integration', 'Legacy modernization'],
+    short: 'Custom business systems, internal tools, APIs and mobile apps.',
+    summary:
+      'Software built around the way your organisation already works — from internal tools and customer portals to integrations and mobile apps.',
+    problem:
+      'Off-the-shelf tools rarely fit. Teams end up juggling spreadsheets, re-typing data between systems and working around software instead of with it.',
+    outcome:
+      'A system that matches your process, connects to the tools you already use and can grow as the organisation does.',
+    includes: [
+      'Business and operations systems',
+      'Internal tools and dashboards',
+      'API design and third-party integrations',
+      'iOS and Android apps (React Native)',
+      'Modernising and maintaining existing systems',
+    ],
+    suitedFor: [
+      'You run key processes on spreadsheets or paper',
+      'Your current systems do not talk to each other',
+      'You need a customer- or staff-facing app',
+    ],
   },
   {
     slug: 'web-development',
     icon: 'globe',
-    title: 'Web Development',
-    description:
-      'Fast, secure, beautifully engineered websites and web apps — from marketing sites to complex customer portals.',
-    points: ['Marketing & corporate sites', 'Web applications', 'E-commerce platforms'],
+    pillar: 'build',
+    title: 'Websites & Web Applications',
+    short: 'Fast, accessible company websites and browser-based applications.',
+    summary:
+      'Company websites, e-commerce and web applications that load quickly, work on every device and are easy for your team to keep up to date.',
+    problem:
+      'A slow, outdated or hard-to-use website costs enquiries. Visitors on mobile data leave before a heavy page finishes loading.',
+    outcome:
+      'A site that explains what you do clearly, works well on phones and turns visitors into enquiries.',
+    includes: [
+      'Corporate and marketing websites',
+      'Web applications and customer portals',
+      'E-commerce',
+      'Performance, accessibility and SEO improvements',
+      'Hosting set-up and ongoing maintenance',
+    ],
+    suitedFor: [
+      'You are launching a new organisation or product',
+      'Your current site is slow, dated or hard to update',
+      'You need customers to log in, order or book online',
+    ],
   },
   {
-    slug: 'mobile-apps',
-    icon: 'smartphone',
-    title: 'Mobile Apps',
-    description:
-      'Native-quality iOS and Android apps built with modern cross-platform frameworks, designed for performance and delight.',
-    points: ['iOS & Android', 'Cross-platform (React Native)', 'App store deployment'],
+    slug: 'cybersecurity',
+    icon: 'shield',
+    pillar: 'secure',
+    title: 'Cybersecurity & Penetration Testing',
+    short: 'Authorised ethical hacking, vulnerability assessments and hardening.',
+    summary:
+      'Ethical hacking carried out with your written permission: we test your websites, applications and networks the way an attacker would, then help you fix what we find.',
+    problem:
+      'Most organisations only discover a security weakness after it has been exploited — through a breach, lost data or a defaced website.',
+    outcome:
+      'A clear, prioritised report of real risks in plain language, and support to close them.',
+    includes: [
+      'Web application and API penetration testing',
+      'Network vulnerability assessments',
+      'Security configuration reviews and hardening',
+      'Remediation support and re-testing',
+      'Security awareness guidance for staff',
+    ],
+    suitedFor: [
+      'You handle customer, financial or personal data',
+      'You are launching a new system and want it checked first',
+      'You are not sure how exposed your organisation is',
+    ],
+    note: 'We only test systems you own or are authorised to have tested, under a written scope agreed before any work starts.',
+  },
+  {
+    slug: 'networking',
+    icon: 'network',
+    pillar: 'connect',
+    title: 'Networking & IT Infrastructure',
+    short: 'Office network design, installation, Wi-Fi and troubleshooting.',
+    summary:
+      'Network design, installation and support for offices and organisations — wired and wireless — so your team stays connected and your systems stay reachable.',
+    problem:
+      'Unreliable Wi-Fi, dropped connections and undocumented equipment slow everyone down, and an unmanaged network is also a security risk.',
+    outcome:
+      'A stable, documented and secured network that is straightforward to support and extend.',
+    includes: [
+      'Network design and installation',
+      'Router, switch, firewall and Wi-Fi configuration',
+      'Network troubleshooting and performance fixes',
+      'Network security and access control',
+      'Documentation and ongoing support',
+    ],
+    suitedFor: [
+      'You are setting up or moving into a new office',
+      'Your connection is slow or drops regularly',
+      'Nobody is quite sure how the current network is set up',
+    ],
   },
   {
     slug: 'cloud-solutions',
     icon: 'cloud',
-    title: 'Cloud Solutions',
-    description:
-      'Cloud architecture, migration, and DevOps that keeps your infrastructure resilient, secure, and ready to scale.',
-    points: ['Cloud architecture', 'CI/CD pipelines', 'Infrastructure as code'],
+    pillar: 'connect',
+    title: 'Cloud & DevOps',
+    short: 'Cloud hosting, migration, deployment pipelines and backups.',
+    summary:
+      'Cloud architecture, migration and deployment automation that keeps your applications available, backed up and affordable to run.',
+    problem:
+      'Servers that are set up by hand are fragile: deployments break things, backups are untested and costs creep up unnoticed.',
+    outcome:
+      'Repeatable deployments, tested backups and infrastructure you can understand and scale.',
+    includes: [
+      'Cloud architecture and migration',
+      'CI/CD deployment pipelines',
+      'Infrastructure as code',
+      'Monitoring, backups and recovery planning',
+      'Cost reviews',
+    ],
+    suitedFor: [
+      'You are moving systems off a single server or office PC',
+      'Releases are manual and risky',
+      'You are unsure your backups would actually restore',
+    ],
   },
   {
     slug: 'ai-data-solutions',
-    icon: 'brain-circuit',
-    title: 'AI & Data Solutions',
-    description:
-      'Practical AI — automation, data pipelines, and intelligent features that turn your data into a real advantage.',
-    points: ['AI-powered automation', 'Data pipelines & analytics', 'LLM integrations'],
+    icon: 'data',
+    pillar: 'build',
+    title: 'Data & AI Solutions',
+    short: 'Reporting, automation and practical AI features.',
+    summary:
+      'Data pipelines, reporting and practical AI features that save your team time and turn the data you already collect into decisions.',
+    problem:
+      'Data sits in separate systems and reports are assembled by hand, so decisions are made late or on incomplete information.',
+    outcome:
+      'Reliable reporting and automation of repetitive work, with AI used only where it genuinely helps.',
+    includes: [
+      'Dashboards and reporting',
+      'Data pipelines and integration',
+      'Workflow automation',
+      'AI and large-language-model integrations',
+    ],
+    suitedFor: [
+      'Monthly reporting takes days of manual work',
+      'Staff spend hours on repetitive tasks',
+      'You want to explore AI without a risky big-bang project',
+    ],
   },
   {
     slug: 'it-consulting',
-    icon: 'lightbulb',
+    icon: 'compass',
+    pillar: 'connect',
     title: 'IT Consulting',
+    short: 'Independent technology advice, audits and planning.',
+    summary:
+      'Straightforward advice on technology decisions — what to build, buy, fix or leave alone — from people who also do the hands-on work.',
+    problem:
+      'Technology decisions are expensive to get wrong, and vendors are rarely neutral about their own products.',
+    outcome:
+      'A clear plan with priorities and trade-offs you can act on, whether or not we do the work.',
+    includes: [
+      'Technology strategy and roadmaps',
+      'Technical audits of existing systems',
+      'Vendor and tool selection',
+      'Digital transformation planning',
+    ],
+    suitedFor: [
+      'You are planning a significant technology investment',
+      'You have inherited systems nobody fully understands',
+      'You want a second opinion on a proposal',
+    ],
+  },
+]
+
+export const principles = [
+  {
+    title: 'Security is part of the build',
     description:
-      'Strategic technology guidance — architecture reviews, digital transformation roadmaps, and technical due diligence.',
-    points: ['Technology strategy', 'Digital transformation', 'Technical audits'],
+      'We also test systems for a living, so security is considered from the first design decision rather than patched on before launch.',
+  },
+  {
+    title: 'One team, fewer hand-offs',
+    description:
+      'Software, security and networking under one roof means one point of contact and nobody blaming another supplier when something breaks.',
+  },
+  {
+    title: 'Plain-language communication',
+    description:
+      'You will always know what is being built, why, what it costs and what happens next — without the jargon.',
+  },
+  {
+    title: 'Based in Nairobi',
+    description:
+      'Same time zone, local context and the ability to be on site when network or infrastructure work needs hands on equipment.',
   },
 ]
 
-export const projectsFallback = [
+export const processSteps = [
   {
-    id: 'p1',
-    title: 'Panda Pay',
-    slug: 'panda-pay',
-    summary: 'A mobile-first payments platform processing thousands of transactions daily across East Africa.',
-    tags: ['Fintech', 'React Native', 'Cloud'],
-    image_url:
-      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1600&auto=format&fit=crop',
-    link_url: '#',
-    featured: true,
+    title: 'Understand',
+    description: 'We talk through your goals, constraints and current setup, and look at what already exists before suggesting anything new.',
   },
   {
-    id: 'p2',
-    title: 'Harvest OS',
-    slug: 'harvest-os',
-    summary: 'A logistics and inventory platform connecting agricultural cooperatives with buyers in real time.',
-    tags: ['Web App', 'Supply Chain', 'AI'],
-    image_url:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop',
-    link_url: '#',
-    featured: true,
+    title: 'Plan',
+    description: 'You receive a written scope with deliverables, timeline and cost. For security work, this includes the agreed testing boundaries.',
   },
   {
-    id: 'p3',
-    title: 'Nova Health',
-    slug: 'nova-health',
-    summary: 'A telemedicine and patient-records system built for clinics with unreliable connectivity.',
-    tags: ['Healthtech', 'Cloud', 'Offline-first'],
-    image_url:
-      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1600&auto=format&fit=crop',
-    link_url: '#',
-    featured: true,
+    title: 'Build & test',
+    description: 'We deliver in stages you can review, testing for quality and security as we go rather than only at the end.',
   },
   {
-    id: 'p4',
-    title: 'Lumo Analytics',
-    slug: 'lumo-analytics',
-    summary: 'A real-time analytics dashboard turning raw operational data into decisions for retail teams.',
-    tags: ['Data', 'Dashboards', 'SaaS'],
-    image_url:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop&fm=jpg&ixid=2',
-    link_url: '#',
-    featured: false,
-  },
-]
-
-export const whyKira = [
-  {
-    icon: 'shield-check',
-    title: 'Security-first engineering',
-    description: 'Every product is designed with security and compliance in mind from day one, not bolted on later.',
-  },
-  {
-    icon: 'gauge',
-    title: 'Built for performance',
-    description: 'We obsess over load times, reliability, and scale so your platform performs under real-world pressure.',
-  },
-  {
-    icon: 'users',
-    title: 'A true technology partner',
-    description: 'We work as an extension of your team — transparent, communicative, and invested in your outcomes.',
-  },
-  {
-    icon: 'rocket',
-    title: 'Fast, disciplined delivery',
-    description: 'Agile delivery cycles with clear milestones mean you see working software early and often.',
-  },
-  {
-    icon: 'map',
-    title: 'Local context, global standard',
-    description: 'Deep understanding of African markets and infrastructure, engineered to international standards.',
-  },
-  {
-    icon: 'life-buoy',
-    title: 'Support that doesn’t disappear',
-    description: 'Post-launch support and monitoring keep your systems healthy long after we ship.',
+    title: 'Launch & support',
+    description: 'We hand over documentation and access, then stay available for fixes, maintenance and the next improvement.',
   },
 ]
 
 export const techStack = [
-  'React', 'TypeScript', 'Node.js', 'Next.js', 'React Native',
-  'Python', 'PostgreSQL', 'Supabase', 'AWS', 'Docker',
-  'Kubernetes', 'Tailwind CSS', 'GraphQL', 'Figma', 'OpenAI',
+  { group: 'Web & mobile', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'React Native'] },
+  { group: 'Back end & data', items: ['Node.js', 'Python', 'PostgreSQL', 'Supabase', 'GraphQL'] },
+  { group: 'Cloud & DevOps', items: ['AWS', 'Docker', 'Kubernetes'] },
+  { group: 'Design & AI', items: ['Figma', 'OpenAI'] },
 ]
 
-export const projectTypes = [
-  'Software Development',
-  'Web Development',
-  'Mobile App',
-  'Cloud Solutions',
-  'AI & Data Solutions',
-  'IT Consulting',
-  'Something else',
-]
+// Optional About-page content. Leave empty until real details are available;
+// the related sections will not render while these are empty.
+export const about = {
+  // e.g. 'KiraTech was founded in 20XX by …'
+  story: [],
+  // e.g. { name: 'Jane Doe', role: 'Founder', photo: '/team/jane.jpg' }
+  team: [],
+}
 
-export const budgetRanges = [
-  'Under $5,000',
-  '$5,000 – $15,000',
-  '$15,000 – $50,000',
-  '$50,000+',
-  'Not sure yet',
+// Case studies. Add real projects here (or in the Supabase `projects` table).
+// Shape:
+// {
+//   slug: 'project-slug',
+//   title: 'Project name',
+//   client: 'Client name (with permission)',
+//   summary: 'One-sentence description.',
+//   tags: ['Web App'],
+//   image_url: '/work/project.jpg',
+//   challenge: '…', approach: '…', solution: '…',
+//   technologies: ['React'],
+//   result: 'Only measured, verifiable results.',
+//   link_url: 'https://…',
+// }
+export const projects = []
+
+// Options for the contact form "Subject" field.
+export const enquirySubjects = [
+  ...services.map((s) => ({ value: s.slug, label: s.title })),
+  { value: 'general', label: 'General enquiry' },
 ]

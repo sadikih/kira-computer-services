@@ -1,39 +1,38 @@
-import { motion } from 'framer-motion'
-
-const directions = {
-  up: { y: 28, x: 0 },
-  down: { y: -28, x: 0 },
-  left: { x: 28, y: 0 },
-  right: { x: -28, y: 0 },
-  none: { x: 0, y: 0 },
-}
+import { useEffect, useRef, useState } from 'react'
 
 /**
- * Scroll-triggered reveal wrapper. Animates once when the element enters the
- * viewport, then stays put — avoids re-triggering on every scroll pass.
+ * Fades content up once when it scrolls into view. CSS does the animation
+ * (see `[data-reveal]` in index.css), including the reduced-motion fallback.
  */
-export default function Reveal({
-  children,
-  direction = 'up',
-  delay = 0,
-  duration = 0.6,
-  className = '',
-  as = 'div',
-  once = true,
-  amount = 0.2,
-}) {
-  const offset = directions[direction] ?? directions.up
-  const MotionTag = motion[as] ?? motion.div
+export default function Reveal({ as: Tag = 'div', delay = 0, className = '', style, children, ...props }) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   return (
-    <MotionTag
-      className={className}
-      initial={{ opacity: 0, ...offset }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once, amount }}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+    <Tag
+      ref={ref}
+      data-reveal=""
+      className={`${className} ${visible ? 'is-visible' : ''}`}
+      style={delay ? { ...style, '--delay': `${delay}ms` } : style}
+      {...props}
     >
       {children}
-    </MotionTag>
+    </Tag>
   )
 }

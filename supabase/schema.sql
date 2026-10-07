@@ -1,8 +1,16 @@
--- Kira Computer Services — Supabase schema
--- Run this in the Supabase SQL editor (or via the CLI) on a fresh project.
+-- KiraTech — Supabase schema
+-- Run this in the Supabase SQL editor on a fresh project. On a project created
+-- from an earlier version, run the statements marked "upgrade" (and drop the
+-- old policies listed at the bottom).
+--
+-- Security model: the public website uses the anon key and can only read
+-- projects and insert enquiries. There are deliberately NO policies granting
+-- the `authenticated` role extra access — Supabase allows public sign-ups by
+-- default, so "authenticated" can mean "anyone". Staff manage data through the
+-- Supabase dashboard, which uses the service role and bypasses RLS.
 
 -- ---------------------------------------------------------------------------
--- projects: portfolio items shown in the "Work" section
+-- projects: case studies shown on /work and /work/<slug>
 -- ---------------------------------------------------------------------------
 create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),
@@ -14,10 +22,26 @@ create table if not exists public.projects (
   image_path text,          -- object path inside the storage bucket, if hosted on Supabase
   image_url text,           -- fully-qualified image URL (external or resolved from image_path)
   link_url text,
+  client text,
+  challenge text,
+  approach text,
+  solution text,
+  technologies text[] not null default '{}',
+  result text,              -- only measured, verifiable outcomes
+  image_alt text,
   featured boolean not null default false,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- upgrade: case-study fields for projects created by an earlier schema
+alter table public.projects add column if not exists client text;
+alter table public.projects add column if not exists challenge text;
+alter table public.projects add column if not exists approach text;
+alter table public.projects add column if not exists solution text;
+alter table public.projects add column if not exists technologies text[] not null default '{}';
+alter table public.projects add column if not exists result text;
+alter table public.projects add column if not exists image_alt text;
 
 alter table public.projects enable row level security;
 
@@ -26,38 +50,40 @@ create policy "Projects are publicly readable"
   on public.projects for select
   using (true);
 
--- Writes are restricted to authenticated staff/service-role only — the
--- public site never inserts or updates projects directly.
-create policy "Only authenticated users can modify projects"
-  on public.projects for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+-- No write policies: projects are edited in the dashboard (service role).
 
 -- ---------------------------------------------------------------------------
--- quote_requests: submissions from the "Request a Quote" contact form
+-- quote_requests: submissions from the contact form (src/lib/enquiry.js)
 -- ---------------------------------------------------------------------------
 create table if not exists public.quote_requests (
   id uuid primary key default gen_random_uuid(),
-  name text not null,
-  email text not null,
-  company text,
-  project_type text not null,
-  budget_range text not null,
-  message text not null,
+  name text not null check (char_length(name) between 1 and 120),
+  email text not null check (char_length(email) between 3 and 254 and email like '%_@_%'),
+  phone text check (char_length(phone) <= 32),
+  company text check (char_length(company) <= 160),
+  subject text not null check (char_length(subject) <= 64),
+  message text not null check (char_length(message) between 10 and 5000),
   created_at timestamptz not null default now()
 );
 
+-- upgrade: tables created by the earlier "Request a Quote" form
+alter table public.quote_requests add column if not exists phone text;
+alter table public.quote_requests add column if not exists subject text;
+do $$ begin
+  if exists (select 1 from information_schema.columns
+             where table_schema = 'public' and table_name = 'quote_requests' and column_name = 'project_type') then
+    alter table public.quote_requests alter column project_type drop not null;
+    alter table public.quote_requests alter column budget_range drop not null;
+  end if;
+end $$;
+
 alter table public.quote_requests enable row level security;
 
--- The public site is only ever allowed to INSERT a new lead — never read,
--- update, or delete existing submissions (that stays restricted to staff).
+-- The public site may only INSERT a new enquiry — never read, update or
+-- delete submissions. Staff read them in the dashboard (service role).
 create policy "Anyone can submit a quote request"
   on public.quote_requests for insert
   with check (true);
-
-create policy "Only authenticated users can read quote requests"
-  on public.quote_requests for select
-  using (auth.role() = 'authenticated');
 
 -- ---------------------------------------------------------------------------
 -- Storage bucket for portfolio media / site imagery
@@ -69,18 +95,14 @@ on conflict (id) do nothing;
 create policy "Public read access to Kira media"
   on storage.objects for select
   using (bucket_id = 'kira-media');
+-- Uploads happen through the dashboard (service role); no upload policy.
 
-create policy "Only authenticated users can upload Kira media"
-  on storage.objects for insert
-  with check (bucket_id = 'kira-media' and auth.role() = 'authenticated');
+-- No seed data: add only real, client-approved case studies to public.projects.
 
 -- ---------------------------------------------------------------------------
--- Seed data (mirrors src/data/content.js so the DB matches the fallback UI)
+-- upgrade: remove policies from earlier versions that granted any signed-up
+-- user access to leads, projects and media.
 -- ---------------------------------------------------------------------------
-insert into public.projects (title, slug, summary, tags, image_url, link_url, featured, sort_order)
-values
-  ('Panda Pay', 'panda-pay', 'A mobile-first payments platform processing thousands of transactions daily across East Africa.', array['Fintech','React Native','Cloud'], 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1600&auto=format&fit=crop', '#', true, 1),
-  ('Harvest OS', 'harvest-os', 'A logistics and inventory platform connecting agricultural cooperatives with buyers in real time.', array['Web App','Supply Chain','AI'], 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop', '#', true, 2),
-  ('Nova Health', 'nova-health', 'A telemedicine and patient-records system built for clinics with unreliable connectivity.', array['Healthtech','Cloud','Offline-first'], 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1600&auto=format&fit=crop', '#', true, 3),
-  ('Lumo Analytics', 'lumo-analytics', 'A real-time analytics dashboard turning raw operational data into decisions for retail teams.', array['Data','Dashboards','SaaS'], 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop&fm=jpg&ixid=2', '#', false, 4)
-on conflict (slug) do nothing;
+drop policy if exists "Only authenticated users can read quote requests" on public.quote_requests;
+drop policy if exists "Only authenticated users can modify projects" on public.projects;
+drop policy if exists "Only authenticated users can upload Kira media" on storage.objects;

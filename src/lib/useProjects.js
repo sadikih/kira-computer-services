@@ -1,40 +1,45 @@
 import { useEffect, useState } from 'react'
-import { supabase, isSupabaseConfigured } from './supabaseClient'
-import { projectsFallback } from '../data/content'
+import { getSupabase, isSupabaseConfigured } from './supabaseClient'
+import { projects as staticProjects } from '../data/content'
+
+/** True when there is (or may be) at least one case study to show. */
+export const hasWork = staticProjects.length > 0 || isSupabaseConfigured
 
 /**
- * Loads portfolio projects from the Supabase `projects` table when
- * configured, otherwise serves the static fallback so the section always
- * renders. See supabase/schema.sql for the expected table shape.
+ * Case studies from the Supabase `projects` table when configured, otherwise
+ * the static list in content.js. `error` is set if the remote load fails.
  */
 export function useProjects() {
-  const [projects, setProjects] = useState(projectsFallback)
-  const [loading, setLoading] = useState(isSupabaseConfigured)
+  const [state, setState] = useState({
+    projects: staticProjects,
+    loading: isSupabaseConfigured,
+    error: null,
+  })
 
   useEffect(() => {
     if (!isSupabaseConfigured) return
-
     let cancelled = false
 
-    async function load() {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('sort_order', { ascending: true })
+    getSupabase()
+      .then((supabase) =>
+        supabase.from('projects').select('*').order('sort_order', { ascending: true }),
+      )
+      .then(({ data, error }) => {
+        if (cancelled) return
+        setState({
+          projects: data?.length ? data : staticProjects,
+          loading: false,
+          error: error?.message ?? null,
+        })
+      })
+      .catch((err) => {
+        if (!cancelled) setState({ projects: staticProjects, loading: false, error: err.message })
+      })
 
-      if (cancelled) return
-
-      if (!error && data?.length) {
-        setProjects(data)
-      }
-      setLoading(false)
-    }
-
-    load()
     return () => {
       cancelled = true
     }
   }, [])
 
-  return { projects, loading }
+  return state
 }
