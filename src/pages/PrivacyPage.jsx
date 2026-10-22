@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <LegalPage
       title="Privacy Policy"
       path="/privacy"
-      updated="7 October 2026"
+      updated="22 October 2026"
       description="How KiraTech collects, uses and protects personal information submitted through this website."
     >
       <p>
@@ -30,8 +30,15 @@ export default function PrivacyPage() {
         </li>
       </ul>
       <p>
-        This website does not use advertising trackers, and it does not set cookies to profile
-        visitors.
+        <strong>Analytics:</strong> we use Google Analytics to understand how many people visit
+        the site and which pages they view. It sets cookies and collects information such as the
+        pages you visit, your approximate location, and your device and browser type. We do not
+        use it for advertising, and Google&apos;s optional data-sharing settings are switched off.
+        You can opt out with the{' '}
+        <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noreferrer noopener">
+          Google Analytics opt-out add-on
+        </a>
+        .
       </p>
 
       <h2>How we use it</h2>

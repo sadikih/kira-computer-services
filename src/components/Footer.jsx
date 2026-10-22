@@ -1,7 +1,3 @@
-import { Mail, MapPin, Phone } from 'lucide-react'
-import Container from './ui/Container'
-import Logo from './ui/Logo'
-import { socialIcons } from './ui/SocialIcons'
 import { Link } from '../lib/router'
 import { hasWork } from '../lib/useProjects'
 import { services, siteInfo, socialLinks } from '../data/content'
@@ -16,94 +12,73 @@ const company = [
 function Column({ title, children }) {
   return (
     <div>
-      <h2 className="text-sm font-semibold text-ink-950">{title}</h2>
-      <ul className="mt-4 flex flex-col gap-1.5 text-sm">{children}</ul>
+      <h2 className="text-xs font-semibold text-ink-950">{title}</h2>
+      <ul className="mt-2.5 flex flex-col gap-2 text-xs">{children}</ul>
     </div>
   )
 }
 
-const linkClass = 'inline-block py-1 text-ink-500 transition-colors hover:text-ink-950'
+const linkClass = 'text-ink-600 hover:underline'
 
 export default function Footer() {
   return (
-    <footer className="glass border-t border-white/80">
-      <Container>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 sm:py-20 lg:grid-cols-12">
-          <div className="col-span-2 lg:col-span-4">
-            <Logo />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-500">{siteInfo.description}</p>
-            {socialLinks.length > 0 && (
-              <ul className="mt-6 flex gap-2">
-                {socialLinks.map((s) => {
-                  const Icon = socialIcons[s.icon]
-                  return (
-                    <li key={s.href}>
-                      <a
-                        href={s.href}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label={`${s.label} (opens in a new tab)`}
-                        className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/10 text-ink-600 transition-colors hover:border-ink-950/25 hover:text-ink-950"
-                      >
-                        {Icon && <Icon className="h-4 w-4" aria-hidden="true" />}
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </div>
+    <footer className="bg-muted text-xs leading-[1.33337] tracking-[-0.01em] text-ink-500">
+      <div className="mx-auto max-w-[1024px] px-4 lg:px-[22px]">
+        <p className="border-b border-[#d2d2d7] py-4 leading-relaxed">{siteInfo.description}</p>
 
-          <div className="lg:col-span-2">
-            <Column title="Company">
-              {company.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className={linkClass}>{l.label}</Link>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-5 sm:grid-cols-3 lg:grid-cols-4">
+          <Column title="Services">
+            {services.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/services/${s.slug}`} className={linkClass}>{s.title}</Link>
+              </li>
+            ))}
+          </Column>
+
+          <Column title="Company">
+            {company.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className={linkClass}>{l.label}</Link>
+              </li>
+            ))}
+          </Column>
+
+          <Column title="Contact">
+            <li><a href={siteInfo.phoneHref} className={linkClass}>{siteInfo.phone}</a></li>
+            <li><a href={`mailto:${siteInfo.email}`} className={`${linkClass} break-all`}>{siteInfo.email}</a></li>
+            <li>{siteInfo.location}</li>
+          </Column>
+
+          {socialLinks.length > 0 && (
+            <Column title="Follow">
+              {socialLinks.map((s) => (
+                <li key={s.href}>
+                  <a href={s.href} target="_blank" rel="noreferrer noopener" className={linkClass}>
+                    {s.label}<span className="sr-only"> (opens in a new tab)</span>
+                  </a>
                 </li>
               ))}
             </Column>
-          </div>
-
-          <div className="lg:col-span-3">
-            <Column title="Services">
-              {services.map((s) => (
-                <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`} className={linkClass}>{s.title}</Link>
-                </li>
-              ))}
-            </Column>
-          </div>
-
-          <div className="col-span-2 sm:col-span-1 lg:col-span-3">
-            <Column title="Contact">
-              <li>
-                <a href={siteInfo.phoneHref} className={`${linkClass} inline-flex items-center gap-2.5`}>
-                  <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
-                  {siteInfo.phone}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${siteInfo.email}`} className={`${linkClass} inline-flex items-center gap-2.5 break-all`}>
-                  <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  {siteInfo.email}
-                </a>
-              </li>
-              <li className="inline-flex items-center gap-2.5 text-ink-500">
-                <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
-                {siteInfo.location}
-              </li>
-            </Column>
-          </div>
+          )}
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-ink-950/10 py-8 text-sm text-ink-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {siteInfo.legalName}. All rights reserved.</p>
-          <ul className="flex gap-6">
-            <li><Link href="/privacy" className={linkClass}>Privacy Policy</Link></li>
-            <li><Link href="/terms" className={linkClass}>Terms of Service</Link></li>
-          </ul>
+        <p className="pt-2 pb-2">
+          More ways to get started: <Link href="/contact" className="text-accent underline">send an enquiry</Link> or call{' '}
+          <a href={siteInfo.phoneHref} className="text-accent underline">{siteInfo.phone}</a>.
+        </p>
+
+        <div className="flex flex-col gap-2 border-t border-[#d2d2d7] py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-8">
+            <p>Copyright © {new Date().getFullYear()} {siteInfo.legalName}. All rights reserved.</p>
+            <ul className="flex divide-x divide-[#d2d2d7]">
+              <li className="pr-2.5"><Link href="/privacy" className={linkClass}>Privacy Policy</Link></li>
+              <li className="px-2.5"><Link href="/terms" className={linkClass}>Terms of Use</Link></li>
+              <li className="pl-2.5"><Link href="/contact" className={linkClass}>Contact</Link></li>
+            </ul>
+          </div>
+          <p>{siteInfo.location}</p>
         </div>
-      </Container>
+      </div>
     </footer>
   )
 }

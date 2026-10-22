@@ -14,9 +14,9 @@ export default function ServicesPage() {
   return (
     <>
       <Seo
-        title="Services"
+        title="IT Services in Nairobi"
         path="/services"
-        description="Software development, websites, cybersecurity and penetration testing, networking, cloud, data and IT consulting from KiraTech in Nairobi."
+        description="IT services in Nairobi: software development, web design, cybersecurity and penetration testing, networking, cloud, data and IT consulting."
         jsonLd={{ '@context': 'https://schema.org', ...breadcrumbLd([['Home', '/'], ['Services', '/services']]) }}
       />
       <PageHeader

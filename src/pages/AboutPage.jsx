@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <>
       <Seo
-        title="About"
+        title="About Us: IT Company in Nairobi"
         path="/about"
         description="KiraTech is a technology company in Nairobi, Kenya, bringing software development, cybersecurity and networking together under one roof."
         jsonLd={{ '@context': 'https://schema.org', ...breadcrumbLd([['Home', '/'], ['About', '/about']]) }}

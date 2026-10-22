@@ -12,8 +12,7 @@ export default function CtaBand({
   return (
     <section className="section" aria-labelledby="cta-title">
       <Container>
-        <Reveal className="card relative isolate overflow-hidden !rounded-3xl px-6 py-14 sm:px-12 sm:py-16 lg:px-16">
-          <div className="pointer-events-none absolute -right-24 -top-24 -z-10 h-80 w-80 rounded-full bg-electric-600/15 blur-3xl" aria-hidden="true" />
+        <Reveal className="card px-6 py-14 sm:px-12 sm:py-16 lg:px-16">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <h2 id="cta-title" className="display-2 text-ink-950">{title}</h2>

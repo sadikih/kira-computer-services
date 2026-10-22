@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, ChevronDown, Mail, Menu, Phone, X } from 'lucide-react'
-import Container from './ui/Container'
+import { ChevronDown, ChevronRight, Mail, Menu, Phone, X } from 'lucide-react'
 import Logo from './ui/Logo'
-import { serviceIcons } from './ui/icons'
 import { Link, useRouter } from '../lib/router'
 import { hasWork } from '../lib/useProjects'
 import { navLinks, services, siteInfo } from '../data/content'
@@ -13,7 +11,6 @@ const links = hasWork
 
 export default function Navbar() {
   const { path } = useRouter()
-  const [scrolled, setScrolled] = useState(false)
   // Menus remember the path they were opened on, so navigating closes them.
   const [menuPath, setMenuPathState] = useState(null)
   const [servicesPath, setServicesPath] = useState(null)
@@ -25,13 +22,6 @@ export default function Navbar() {
   const toggleRef = useRef(null)
 
   const isActive = (href) => path === href || path.startsWith(`${href}/`)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   // Desktop services menu: close on outside click or Escape.
   useEffect(() => {
@@ -74,136 +64,127 @@ export default function Navbar() {
     }
   }, [menuOpen])
 
-  const solid = scrolled || menuOpen
+  const navLink = 'flex h-11 items-center px-2 text-xs tracking-[-0.01em] transition-colors hover:text-ink-950'
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
-        solid ? 'glass border-ink-950/[0.06] shadow-[0_8px_24px_-16px_rgb(11_18_32/0.25)]' : 'border-transparent'
-      }`}
-    >
-      <Container>
-        <div className="flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]">
-          <Logo />
+    <header className="glass fixed inset-x-0 top-0 z-50">
+      <div className="mx-auto flex h-11 max-w-[1024px] items-center justify-between px-4 lg:px-[22px]">
+        <Logo />
 
-          <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-1">
-              <li ref={servicesRef} className="relative">
-                <button
-                  type="button"
-                  aria-expanded={servicesOpen}
-                  aria-controls="services-menu"
-                  onClick={() => setServicesOpen((v) => !v)}
-                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-colors hover:text-ink-950 ${
-                    isActive('/services') ? 'text-ink-950' : 'text-ink-600'
-                  }`}
-                >
-                  Services
-                  <ChevronDown className={`h-4 w-4 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
-                </button>
-                <div
-                  id="services-menu"
-                  hidden={!servicesOpen}
-                  className="absolute left-1/2 top-full mt-3 w-[42rem] -translate-x-1/2 card p-3"
-                >
-                  <ul className="grid grid-cols-2 gap-1">
-                    {services.map((s) => {
-                      const Icon = serviceIcons[s.icon]
-                      return (
+        <nav aria-label="Primary" className="hidden flex-1 lg:block">
+          <ul className="flex items-center justify-evenly px-8">
+            <li ref={servicesRef}>
+              <button
+                type="button"
+                aria-expanded={servicesOpen}
+                aria-controls="services-menu"
+                onClick={() => setServicesOpen((v) => !v)}
+                className={`${navLink} ${isActive('/services') || servicesOpen ? 'text-ink-950' : 'text-ink-950/80'}`}
+              >
+                Services
+              </button>
+              <div
+                id="services-menu"
+                hidden={!servicesOpen}
+                className="page-in absolute inset-x-0 top-11 bg-[#fafafc] border-b border-black/5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.25)]"
+              >
+                <div className="mx-auto grid max-w-[1024px] grid-cols-[1.4fr_1fr] gap-12 px-[22px] pt-10 pb-20">
+                  <div>
+                    <h2 className="text-xs text-ink-500">Explore Services</h2>
+                    <ul className="mt-4 flex flex-col gap-2">
+                      {services.map((s) => (
                         <li key={s.slug}>
                           <Link
                             href={`/services/${s.slug}`}
-                            className="flex gap-3.5 rounded-xl p-3.5 transition-colors hover:bg-white/80"
+                            className="text-2xl font-semibold tracking-[0.009em] text-ink-950 transition-colors hover:text-accent"
                           >
-                            <Icon className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
-                            <span>
-                              <span className="block text-sm font-semibold text-ink-950">{s.title}</span>
-                              <span className="mt-1 block text-[0.8125rem] leading-snug text-ink-500">{s.short}</span>
-                            </span>
+                            {s.title}
                           </Link>
                         </li>
-                      )
-                    })}
-                    <li>
-                      <Link
-                        href="/services"
-                        className="flex h-full items-center justify-between gap-3 rounded-xl border border-ink-950/10 p-3.5 text-sm font-semibold text-ink-950 transition-colors hover:border-ink-950/25"
-                      >
-                        All services overview
-                        <ArrowRight className="h-4 w-4 text-accent" aria-hidden="true" />
-                      </Link>
-                    </li>
-                  </ul>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h2 className="text-xs text-ink-500">More from KiraTech</h2>
+                    <ul className="mt-4 flex flex-col gap-2.5 text-xs font-semibold text-ink-950">
+                      <li><Link href="/services" className="hover:text-accent">Compare all services</Link></li>
+                      <li><Link href="/about" className="hover:text-accent">About us</Link></li>
+                      <li><Link href="/contact" className="hover:text-accent">Start a project</Link></li>
+                      <li><a href={siteInfo.phoneHref} className="hover:text-accent">Call {siteInfo.phone}</a></li>
+                    </ul>
+                  </div>
                 </div>
+              </div>
+            </li>
+            {links.slice(1).map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
+                  className={`${navLink} ${isActive(link.href) ? 'text-ink-950' : 'text-ink-950/80'}`}
+                >
+                  {link.label}
+                </Link>
               </li>
-              {links.slice(1).map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    aria-current={isActive(link.href) ? 'page' : undefined}
-                    className={`rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-colors hover:text-ink-950 ${
-                      isActive(link.href) ? 'text-ink-950' : 'text-ink-600'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            ))}
+          </ul>
+        </nav>
 
-          <div className="hidden items-center gap-5 lg:flex">
-            <a href={siteInfo.phoneHref} className="text-sm font-medium text-ink-600 transition-colors hover:text-ink-950">
-              {siteInfo.phone}
-            </a>
-            <Link href="/contact" className="btn btn-primary">
-              Start a project <ArrowRight className="arrow" aria-hidden="true" />
-            </Link>
-          </div>
-
+        <div className="flex items-center gap-1">
+          <a
+            href={siteInfo.phoneHref}
+            aria-label={`Call ${siteInfo.phone}`}
+            className="flex h-11 w-9 items-center justify-center text-ink-950/80 transition-colors hover:text-ink-950"
+          >
+            <Phone className="h-[15px] w-[15px]" strokeWidth={1.6} aria-hidden="true" />
+          </a>
+          <a
+            href={`mailto:${siteInfo.email}`}
+            aria-label={`Email ${siteInfo.email}`}
+            className="flex h-11 w-9 items-center justify-center text-ink-950/80 transition-colors hover:text-ink-950"
+          >
+            <Mail className="h-[15px] w-[15px]" strokeWidth={1.6} aria-hidden="true" />
+          </a>
           <button
             ref={toggleRef}
             type="button"
-            className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-ink-950 lg:hidden"
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-ink-950/80 lg:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
-            {menuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+            {menuOpen ? <X className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> : <Menu className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" />}
           </button>
         </div>
-      </Container>
+      </div>
 
       {menuOpen && (
-        <div
-          id="mobile-menu"
-          className="page-in h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-950/[0.06] bg-canvas/80 lg:hidden"
-        >
-          <Container className="flex min-h-full flex-col py-6">
+        <div id="mobile-menu" className="page-in h-[calc(100dvh-2.75rem)] overflow-y-auto bg-white lg:hidden">
+          <div className="flex min-h-full flex-col px-12 pt-6 pb-10">
             <nav aria-label="Mobile">
-              <ul className="divide-y divide-ink-950/10 border-b border-ink-950/10">
+              <ul className="flex flex-col gap-1">
                 <li>
                   <details className="group" open={isActive('/services')}>
-                    <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between font-display text-2xl font-medium text-ink-950 [&::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer list-none items-center justify-between py-1.5 text-[1.75rem] font-semibold tracking-[0.007em] text-ink-950 [&::-webkit-details-marker]:hidden">
                       Services
                       <ChevronDown className="h-5 w-5 text-ink-500 transition-transform group-open:rotate-180" aria-hidden="true" />
                     </summary>
-                    <ul className="pb-4">
+                    <ul className="pt-1 pb-3">
                       {services.map((s) => (
                         <li key={s.slug}>
                           <Link
                             href={`/services/${s.slug}`}
                             aria-current={path === `/services/${s.slug}` ? 'page' : undefined}
-                            className="block py-2.5 text-base text-ink-600 hover:text-ink-950 aria-[current=page]:text-accent"
+                            className="block py-1.5 text-[1.0625rem] font-semibold text-ink-600 hover:text-ink-950 aria-[current=page]:text-accent"
                           >
                             {s.title}
                           </Link>
                         </li>
                       ))}
                       <li>
-                        <Link href="/services" className="text-link mt-2 py-2.5 text-base">
-                          All services <ArrowRight aria-hidden="true" />
+                        <Link href="/services" className="text-link py-1.5 text-[1.0625rem]">
+                          All services <ChevronRight className="h-4 w-4" aria-hidden="true" />
                         </Link>
                       </li>
                     </ul>
@@ -214,7 +195,7 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       aria-current={isActive(link.href) ? 'page' : undefined}
-                      className="flex min-h-14 items-center font-display text-2xl font-medium text-ink-950 aria-[current=page]:text-accent"
+                      className="block py-1.5 text-[1.75rem] font-semibold tracking-[0.007em] text-ink-950 aria-[current=page]:text-accent"
                     >
                       {link.label}
                     </Link>
@@ -224,20 +205,10 @@ export default function Navbar() {
             </nav>
 
             <div className="mt-auto pt-10">
-              <Link href="/contact" className="btn btn-primary btn-lg w-full">
-                Start a project <ArrowRight className="arrow" aria-hidden="true" />
-              </Link>
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                <a href={siteInfo.phoneHref} className="btn btn-secondary">
-                  <Phone aria-hidden="true" /> Call
-                </a>
-                <a href={`mailto:${siteInfo.email}`} className="btn btn-secondary">
-                  <Mail aria-hidden="true" /> Email
-                </a>
-              </div>
-              <p className="mt-6 text-center text-sm text-ink-500">{siteInfo.location}</p>
+              <Link href="/contact" className="btn btn-primary w-full">Start a project</Link>
+              <p className="mt-6 text-center text-xs text-ink-500">{siteInfo.location}</p>
             </div>
-          </Container>
+          </div>
         </div>
       )}
     </header>

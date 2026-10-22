@@ -22,9 +22,9 @@ export default function ServicePage({ slug }) {
   return (
     <>
       <Seo
-        title={service.title}
+        title={service.seoTitle}
         path={path}
-        description={`${service.summary} KiraTech, Nairobi.`}
+        description={service.seoDescription}
         jsonLd={{
           '@context': 'https://schema.org',
           '@graph': [

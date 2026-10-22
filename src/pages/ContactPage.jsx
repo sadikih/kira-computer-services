@@ -10,7 +10,7 @@ export default function ContactPage() {
   return (
     <>
       <Seo
-        title="Contact"
+        title="Contact Us: IT Services in Nairobi"
         path="/contact"
         description="Contact KiraTech in Nairobi. Call 0112796092, email shamisi@kiratech.co.ke or send us a message about your project."
         jsonLd={{
