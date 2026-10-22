@@ -1,4 +1,4 @@
-import { siteInfo } from '../data/content'
+import { services, siteInfo } from '../data/content'
 
 export const organizationLd = {
   '@type': 'ProfessionalService',
@@ -12,6 +12,7 @@ export const organizationLd = {
   telephone: '+254112796092',
   address: { '@type': 'PostalAddress', addressLocality: 'Nairobi', addressCountry: 'KE' },
   areaServed: { '@type': 'Country', name: 'Kenya' },
+  knowsAbout: services.map((s) => s.title),
 }
 
 export function breadcrumbLd(items) {

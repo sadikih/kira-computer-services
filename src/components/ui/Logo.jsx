@@ -12,11 +12,9 @@ export function LogoMark({ className = 'h-7 w-auto' }) {
 
 export default function Logo({ className = '' }) {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2.5 text-ink-950 ${className}`} aria-label="KiraTech home">
-      <LogoMark className="h-6 w-auto text-accent" />
-      <span className="font-display text-xl font-semibold tracking-tight">
-        Kira<span className="text-accent">Tech</span>
-      </span>
+    <Link href="/" className={`inline-flex h-11 items-center gap-1.5 text-ink-950 ${className}`} aria-label="KiraTech home">
+      <LogoMark className="h-[15px] w-auto" />
+      <span className="text-sm font-semibold tracking-[-0.01em]">KiraTech</span>
     </Link>
   )
 }

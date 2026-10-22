@@ -9,11 +9,11 @@
 export const siteInfo = {
   name: 'KiraTech',
   legalName: 'KiraTech',
-  // Assumed from the email domain — change if the site is served elsewhere.
-  url: 'https://kiratech.co.ke',
+  // The live host redirects kiratech.co.ke here, so canonical URLs must use www.
+  url: 'https://www.kiratech.co.ke',
   tagline: 'Software, security and networks for organisations in Kenya.',
   description:
-    'KiraTech is a Nairobi technology company. We build software and websites, carry out authorised security testing, and design the networks and cloud infrastructure your systems run on.',
+    'KiraTech is a Nairobi IT company offering software development, web design, penetration testing, network installation and cloud services across Kenya.',
   email: 'shamisi@kiratech.co.ke',
   phone: '0112796092',
   phoneHref: 'tel:+254112796092',
@@ -57,6 +57,10 @@ export const pillars = [
 export const services = [
   {
     slug: 'software-development',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Software Development Company in Nairobi',
+    seoDescription:
+      'Custom software development in Nairobi: business systems, internal tools, API integrations and iOS/Android apps built around how your organisation works.',
     icon: 'code',
     pillar: 'build',
     title: 'Software Development',
@@ -82,6 +86,10 @@ export const services = [
   },
   {
     slug: 'web-development',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Web Design & Website Development in Nairobi',
+    seoDescription:
+      'Web design and website development in Nairobi: fast, mobile-friendly company websites, e-commerce stores and web apps that are easy to keep updated.',
     icon: 'globe',
     pillar: 'build',
     title: 'Websites & Web Applications',
@@ -107,6 +115,10 @@ export const services = [
   },
   {
     slug: 'cybersecurity',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Cybersecurity & Penetration Testing in Kenya',
+    seoDescription:
+      'Authorised penetration testing and cybersecurity in Kenya. We test your websites, APIs and networks like an attacker would, then help you fix what we find.',
     icon: 'shield',
     pillar: 'secure',
     title: 'Cybersecurity & Penetration Testing',
@@ -133,6 +145,10 @@ export const services = [
   },
   {
     slug: 'networking',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Network Installation & IT Support in Nairobi',
+    seoDescription:
+      'Office network design, installation and support in Nairobi: routers, switches, firewalls and Wi-Fi set up, secured and documented for your team.',
     icon: 'network',
     pillar: 'connect',
     title: 'Networking & IT Infrastructure',
@@ -158,6 +174,10 @@ export const services = [
   },
   {
     slug: 'cloud-solutions',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Cloud Services & DevOps in Kenya',
+    seoDescription:
+      'Cloud migration, CI/CD pipelines, infrastructure as code, monitoring and backups for organisations in Kenya, with cost reviews to keep hosting affordable.',
     icon: 'cloud',
     pillar: 'connect',
     title: 'Cloud & DevOps',
@@ -183,6 +203,10 @@ export const services = [
   },
   {
     slug: 'ai-data-solutions',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'Data Analytics & AI Solutions in Kenya',
+    seoDescription:
+      'Dashboards, reporting, data pipelines, workflow automation and practical AI integrations that turn the data your Kenyan organisation collects into decisions.',
     icon: 'data',
     pillar: 'build',
     title: 'Data & AI Solutions',
@@ -207,6 +231,10 @@ export const services = [
   },
   {
     slug: 'it-consulting',
+    // Search result title (" | KiraTech" is appended) and description.
+    seoTitle: 'IT Consulting in Nairobi',
+    seoDescription:
+      'Independent IT consulting in Nairobi: technology strategy, audits of existing systems, vendor selection and digital transformation planning.',
     icon: 'compass',
     pillar: 'connect',
     title: 'IT Consulting',
