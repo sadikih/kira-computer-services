@@ -12,7 +12,7 @@ export default function WorkPage() {
 
   return (
     <>
-      <Seo title="Work" path="/work" description="Selected projects and case studies from KiraTech, Nairobi." />
+      <Seo title="Work" path="/work" description="Case studies from KiraTech in Nairobi: software, web, cybersecurity and networking projects, with the challenge, approach, technology and results." />
       <PageHeader
         eyebrow="Work"
         title="Selected projects."

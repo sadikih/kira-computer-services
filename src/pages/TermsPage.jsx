@@ -9,7 +9,7 @@ export default function TermsPage() {
       title="Terms of Service"
       path="/terms"
       updated="7 October 2026"
-      description="Terms that apply to your use of the KiraTech website."
+      description="Terms of service for the KiraTech website: acceptable use, our services, intellectual property, liability and the law that applies in Kenya."
     >
       <p>
         These terms apply to your use of this website, operated by {siteInfo.name} in{' '}

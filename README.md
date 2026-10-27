@@ -65,7 +65,7 @@ Upload `dist/` to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pag
 - Each route is a folder with its own `index.html` (`/services/` → `dist/services/index.html`).
 - `dist/404.html` is served for unknown URLs by most hosts automatically. On nginx, use
   `try_files $uri $uri/ /404.html;`.
-- `sitemap.xml` and `robots.txt` are generated on build from `siteInfo.url` in `content.js`
+- `sitemap.xml`, `robots.txt` and `llms.txt` are generated on build from `siteInfo.url` in `content.js`
   (currently `https://kiratech.co.ke` — change it if the site lives elsewhere).
 
 ## Structure
@@ -85,7 +85,7 @@ src/
     structuredData.js    JSON-LD helpers
   routes.js              Routes that are prerendered / listed in the sitemap
   entry-server.jsx       Server render entry used by the prerender step
-scripts/prerender.js     Writes static HTML per route, 404.html, sitemap.xml, robots.txt
+scripts/prerender.js     Writes static HTML per route, 404.html, sitemap.xml, robots.txt, llms.txt
 ```
 
 ## Design system

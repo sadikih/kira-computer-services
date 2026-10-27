@@ -5,7 +5,7 @@ import Container from './Container'
 /** Standard top section for inner pages: breadcrumb, eyebrow, H1, intro. */
 export default function PageHeader({ eyebrow, title, intro, breadcrumbs = [], children }) {
   return (
-    <section className="relative isolate overflow-hidden pt-24 pb-14 sm:pt-32 sm:pb-20">
+    <section className="relative isolate overflow-hidden bg-linear-to-b from-muted to-white pt-24 pb-14 sm:pt-32 sm:pb-20">
       <Container>
         {breadcrumbs.length > 0 && (
           <nav aria-label="Breadcrumb" className="rise mb-8">
