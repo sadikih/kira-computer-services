@@ -86,11 +86,11 @@ export default function Navbar() {
               <div
                 id="services-menu"
                 hidden={!servicesOpen}
-                className="page-in absolute inset-x-0 top-11 bg-[#fafafc] border-b border-black/5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.25)]"
+                className="page-in absolute inset-x-0 top-11 bg-white border-b border-black/5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.25)]"
               >
                 <div className="mx-auto grid max-w-[1024px] grid-cols-[1.4fr_1fr] gap-12 px-[22px] pt-10 pb-20">
                   <div>
-                    <h2 className="text-xs text-ink-500">Explore Services</h2>
+                    <p className="text-xs text-ink-500">Explore Services</p>
                     <ul className="mt-4 flex flex-col gap-2">
                       {services.map((s) => (
                         <li key={s.slug}>
@@ -105,7 +105,7 @@ export default function Navbar() {
                     </ul>
                   </div>
                   <div>
-                    <h2 className="text-xs text-ink-500">More from KiraTech</h2>
+                    <p className="text-xs text-ink-500">More from KiraTech</p>
                     <ul className="mt-4 flex flex-col gap-2.5 text-xs font-semibold text-ink-950">
                       <li><Link href="/services" className="hover:text-accent">Compare all services</Link></li>
                       <li><Link href="/about" className="hover:text-accent">About us</Link></li>

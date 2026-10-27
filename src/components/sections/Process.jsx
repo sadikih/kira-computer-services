@@ -5,7 +5,7 @@ import { processSteps } from '../../data/content'
 
 export default function Process() {
   return (
-    <section id="process" className="section" aria-labelledby="process-title">
+    <section id="process" className="section bg-muted" aria-labelledby="process-title">
       <Container>
         <SectionHeading
           id="process-title"

@@ -1,6 +1,6 @@
 // Renders every static route to its own HTML file so visitors, search engines
 // and link previews get real content and metadata without running JavaScript.
-// Also writes 404.html and sitemap.xml. Runs after `vite build` (see package.json).
+// Also writes 404.html, sitemap.xml, robots.txt and llms.txt. Runs after `vite build` (see package.json).
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -9,7 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 const serverEntry = path.join(root, 'dist-server', 'entry-server.js')
 
-const { render, staticRoutes, siteInfo } = await import(serverEntry)
+const { render, staticRoutes, siteInfo, services } = await import(serverEntry)
 const template = await fs.readFile(path.join(dist, 'index.html'), 'utf8')
 
 // React 19 emits hoisted <title>/<meta>/<link> tags first; move them into <head>.
@@ -42,6 +42,28 @@ await fs.writeFile(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`,
 )
 await fs.writeFile(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteInfo.url}/sitemap.xml\n`)
+// llms.txt (llmstxt.org): a plain-Markdown site summary for AI assistants.
+const llms = `# ${siteInfo.name}
+
+> ${siteInfo.description}
+
+Location: ${siteInfo.location}. Email: ${siteInfo.email}. Phone: ${siteInfo.phone}.
+
+## Services
+
+${services.map((s) => `- [${s.title}](${siteInfo.url}/services/${s.slug}): ${s.short}`).join('\n')}
+
+## Company
+
+- [About](${siteInfo.url}/about)
+- [Contact](${siteInfo.url}/contact)
+
+## Optional
+
+- [Privacy policy](${siteInfo.url}/privacy)
+- [Terms of service](${siteInfo.url}/terms)
+`
+await fs.writeFile(path.join(dist, 'llms.txt'), llms)
 await fs.rm(path.join(root, 'dist-server'), { recursive: true, force: true })
 
-console.log(`Prerendered ${staticRoutes.length} routes + 404.html, sitemap.xml, robots.txt`)
+console.log(`Prerendered ${staticRoutes.length} routes + 404.html, sitemap.xml, robots.txt, llms.txt`)

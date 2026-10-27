@@ -24,7 +24,7 @@ export default function Footer() {
   return (
     <footer className="bg-muted text-xs leading-[1.33337] tracking-[-0.01em] text-ink-500">
       <div className="mx-auto max-w-[1024px] px-4 lg:px-[22px]">
-        <p className="border-b border-[#d2d2d7] py-4 leading-relaxed">{siteInfo.description}</p>
+        <p className="border-b border-[rgb(11_31_51/0.1)] py-4 leading-relaxed">{siteInfo.description}</p>
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-5 sm:grid-cols-3 lg:grid-cols-4">
           <Column title="Services">
@@ -67,10 +67,10 @@ export default function Footer() {
           <a href={siteInfo.phoneHref} className="text-accent underline">{siteInfo.phone}</a>.
         </p>
 
-        <div className="flex flex-col gap-2 border-t border-[#d2d2d7] py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 border-t border-[rgb(11_31_51/0.1)] py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-2 sm:flex-row sm:gap-8">
             <p>Copyright © {new Date().getFullYear()} {siteInfo.legalName}. All rights reserved.</p>
-            <ul className="flex divide-x divide-[#d2d2d7]">
+            <ul className="flex divide-x divide-[rgb(11_31_51/0.1)]">
               <li className="pr-2.5"><Link href="/privacy" className={linkClass}>Privacy Policy</Link></li>
               <li className="px-2.5"><Link href="/terms" className={linkClass}>Terms of Use</Link></li>
               <li className="pl-2.5"><Link href="/contact" className={linkClass}>Contact</Link></li>

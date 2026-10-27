@@ -5,19 +5,21 @@
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  /* Apple.com palette */
+  /* Brand palette, taken from the logo: deep navy with the mark's cyan.
+     Every text pairing below meets WCAG AA on white and on --color-muted. */
   --color-canvas: #ffffff;
   --color-surface: #ffffff;
-  --color-muted: #f5f5f7; /* light tile / footer grey */
+  --color-muted: #eef4f7; /* cool tinted tile / footer */
 
-  --color-ink-950: #1d1d1f; /* headings and body */
-  --color-ink-800: #1d1d1f;
-  --color-ink-600: #424245;
-  --color-ink-500: #6e6e73; /* secondary copy */
+  --color-ink-950: #0b1f33; /* navy: headings, body, dark bands */
+  --color-ink-800: #16304a;
+  --color-ink-600: #3e5468;
+  --color-ink-500: #5a6d80; /* secondary copy */
 
-  --color-accent: #0066cc; /* link blue */
-  --color-electric-600: #0071e3; /* button blue */
-  --color-electric-700: #0077ed; /* button hover */
+  --color-accent: #0e7490; /* teal links and icons */
+  --color-electric-600: #0e7490; /* button */
+  --color-electric-700: #155e75; /* button hover */
+  --color-brand: #5ee1ff; /* logo cyan, for use on navy only */
 
   --color-success: #15803d;
   --color-danger: #e30000;
@@ -47,7 +49,7 @@ body {
 }
 
 ::selection {
-  background: #b4d7ff;
+  background: #bdeefa;
 }
 
 /* One focus style for every interactive element. */
@@ -112,10 +114,10 @@ svg {
     border: 1px solid transparent;
     border-radius: 980px;
     font-size: 1.0625rem;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: -0.022em;
     white-space: nowrap;
-    transition: background-color 0.24s var(--ease-out-expo), color 0.24s var(--ease-out-expo), border-color 0.24s var(--ease-out-expo);
+    transition: background-color 0.24s var(--ease-out-expo), color 0.24s var(--ease-out-expo), border-color 0.24s var(--ease-out-expo), transform 0.24s var(--ease-out-expo);
   }
   .btn[disabled] {
     opacity: 0.42;
@@ -126,15 +128,13 @@ svg {
     height: 1rem;
     flex-shrink: 0;
   }
-  .btn svg.arrow {
-    display: none; /* Apple buttons carry no icons */
-  }
   .btn-primary {
     background: var(--color-electric-600);
     color: #fff;
   }
   .btn-primary:hover {
     background: var(--color-electric-700);
+    transform: translateY(-1px);
   }
   .btn-secondary {
     border-color: var(--color-electric-600);
@@ -165,19 +165,20 @@ svg {
     height: 1rem;
   }
 
-  /* Flat grey tile, as on apple.com */
   .card {
     background: var(--color-muted);
-    border-radius: 18px;
+    border: 1px solid rgb(11 31 51 / 0.06);
+    border-radius: 20px;
   }
   .card-interactive {
-    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
   }
   .card-interactive:hover {
-    transform: scale(1.01);
-    box-shadow: 2px 4px 12px rgb(0 0 0 / 0.08);
+    transform: translateY(-3px);
+    border-color: rgb(14 116 144 / 0.35);
+    box-shadow: 0 14px 30px -18px rgb(11 31 51 / 0.35);
   }
-  /* Apple global-nav material */
+  /* Translucent nav material */
   .glass {
     background: rgb(255 255 255 / 0.8); /* apple.com nav over a light page */
     backdrop-filter: saturate(180%) blur(20px);
@@ -188,58 +189,38 @@ svg {
     padding-block: clamp(4rem, 2.5rem + 5vw, 6.5rem);
   }
 
-  /* Kept as a no-op so existing markup still works; apple.com has no background texture. */
+  /* Faint dot grid, used behind the hero and dark panels. */
   .grid-bg {
-    display: none;
+    background-image: radial-gradient(rgb(14 116 144 / 0.16) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
   }
 
-  /* Homepage tiles */
-  .tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    text-align: center;
-    padding: 3.25rem 1.5rem 0;
-  }
-  .tile-headline {
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.003em;
-    line-height: 1.1;
-    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); /* 28 → 40px */
-  }
-  .tile-subhead {
-    margin-top: 0.375rem;
-    font-family: var(--font-display);
-    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem); /* 17 → 21px */
-    line-height: 1.2;
-    letter-spacing: 0.011em;
-  }
-  .tile-ctas {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.875rem;
-    margin-top: 1.125rem;
-  }
-  .tile-ctas .btn {
-    min-height: 2.25rem;
-    padding: 0 1rem;
-    font-size: 0.875rem;
-    letter-spacing: -0.016em;
-  }
+  /* Navy panel with a cyan glow, in place of flat black. */
   .tile-dark {
-    background: #000;
-    color: #f5f5f7;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgb(94 225 255 / 0.18), transparent 55%),
+      radial-gradient(90% 80% at 0% 100%, rgb(14 116 144 / 0.35), transparent 60%),
+      var(--color-ink-950);
+    color: #e6f1f7;
+  }
+  .tile-dark .lede {
+    color: #b7c8d6;
+  }
+  .tile-dark .btn-primary {
+    background: var(--color-brand);
+    color: var(--color-ink-950);
+  }
+  .tile-dark .btn-primary:hover {
+    background: #8ae9ff;
   }
   .tile-dark .btn-secondary {
-    border-color: #2997ff;
-    color: #2997ff;
+    border-color: rgb(94 225 255 / 0.6);
+    color: var(--color-brand);
   }
   .tile-dark .btn-secondary:hover {
-    background: #2997ff;
-    color: #fff;
+    background: var(--color-brand);
+    color: var(--color-ink-950);
   }
 
 /* Form controls */
@@ -355,78 +336,6 @@ svg {
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
-}
-
-/* apple.com's first tile, measured at desktop width: 692px tall below the 44px nav,
-   56px top padding, copy layered over a full-tile background image. */
-.hero-tile {
-  position: relative;
-  isolation: isolate;
-  height: 692px;
-  margin-top: 44px;
-  padding-top: 56px;
-  overflow: hidden;
-  background: #fff;
-  text-align: center;
-}
-@media (max-width: 1068px) {
-  .hero-tile { height: 580px; padding-top: 48px; }
-}
-@media (max-width: 734px) {
-  .hero-tile { height: 500px; padding-top: 40px; }
-}
-.hero-headline {
-  font-family: var(--font-display);
-  font-size: 56px;
-  line-height: 1.07143;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-}
-.hero-subhead {
-  margin-top: 6px;
-  font-family: var(--font-display);
-  font-size: 28px;
-  line-height: 1.14286;
-  letter-spacing: 0.007em;
-}
-.hero-callout {
-  margin-top: 9px;
-  font-size: 19px;
-  line-height: 1.21053;
-  letter-spacing: 0.012em;
-  color: var(--color-ink-500);
-}
-@media (max-width: 734px) {
-  .hero-headline { font-size: 40px; line-height: 1.1; }
-  .hero-subhead { font-size: 21px; line-height: 1.19048; }
-  .hero-callout { font-size: 17px; }
-}
-.hero-ctas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 17px;
-  margin-top: 14px; /* buttons land at 244px, as on apple.com */
-}
-.hero-ctas .btn {
-  min-height: 44px;
-  padding: 11px 21px;
-  font-size: 17px;
-  line-height: 1.17648;
-}
-.hero-image {
-  display: flex;
-  justify-content: center;
-  margin-top: 56px;
-}
-.hero-image svg {
-  height: 300px;
-  width: auto;
-  color: var(--color-electric-600);
-}
-@media (max-width: 734px) {
-  .hero-image { margin-top: 48px; }
-  .hero-image svg { height: 190px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
