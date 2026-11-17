@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import Container from '../ui/Container'
 import Reveal from '../ui/Reveal'
 import SectionHeading from '../ui/SectionHeading'
@@ -6,51 +6,45 @@ import { serviceIcons } from '../ui/icons'
 import { Link } from '../../lib/router'
 import { pillars, services } from '../../data/content'
 
-/** Services grouped under the three pillars: pillar intro on the left, its services on the right. */
+const pillarTitle = Object.fromEntries(pillars.map((p) => [p.key, p.title]))
+// Bento rhythm on a 6-column grid: wide/narrow, narrow/wide, half/half, full.
+const spans = ['lg:col-span-4', 'lg:col-span-2', 'lg:col-span-2', 'lg:col-span-4', 'lg:col-span-3', 'lg:col-span-3', 'lg:col-span-6']
+
+/** Services as an Apple-style bento grid; each tile is tagged with its pillar. */
 export default function Services() {
   return (
     <section id="services" className="section" aria-labelledby="services-title">
       <Container>
         <SectionHeading
           id="services-title"
+          align="center"
           eyebrow="What we do"
-          title="Seven services, one accountable team."
-          description="Grouped by what you need: something built, something secured, or everything kept connected."
+          title="Seven services. One accountable team."
+          description="Something built, something secured, or everything kept connected."
         />
-        <div className="mt-14 flex flex-col">
-          {pillars.map((p) => (
-            <div key={p.key} className="grid gap-8 border-t border-ink-950/10 py-12 lg:grid-cols-12">
-              <Reveal className="lg:col-span-4">
-                <h3 className="font-display text-3xl font-semibold text-ink-950">{p.title}</h3>
-                <p className="mt-3 max-w-sm leading-relaxed text-ink-600">{p.description}</p>
+        <ul className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+          {services.map((s, i) => {
+            const Icon = serviceIcons[s.icon]
+            const wide = /col-span-(4|6)/.test(spans[i] ?? '')
+            const last = i === services.length - 1 && services.length % 2 === 1
+            return (
+              <Reveal as="li" key={s.slug} delay={(i % 3) * 70} className={`${spans[i] ?? 'lg:col-span-3'} ${last ? 'sm:col-span-2' : ''}`}>
+                <Link href={`/services/${s.slug}`} className="card card-interactive bento group flex h-full min-h-[300px] flex-col p-8 sm:p-10">
+                  <span className="icon-glass">
+                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  </span>
+                  <p className="mt-8 text-sm font-semibold text-accent">{pillarTitle[s.pillar]}</p>
+                  <h3 className={`mt-1.5 font-display font-semibold tracking-[-0.02em] text-ink-950 ${wide ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-[1.75rem]'}`}>{s.title}</h3>
+                  <p className={`mt-3 flex-1 leading-relaxed text-ink-500 ${wide ? 'max-w-lg text-lg' : ''}`}>{s.short}</p>
+                  <span className="text-link mt-6 font-medium">
+                    Learn more<span className="sr-only"> about {s.title}</span>
+                    <ChevronRight className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </span>
+                </Link>
               </Reveal>
-              <ul className="grid gap-4 sm:grid-cols-2 lg:col-span-8">
-                {services
-                  .filter((s) => s.pillar === p.key)
-                  .map((s, i, list) => {
-                    const Icon = serviceIcons[s.icon]
-                    // A leftover card in an odd-sized group fills the row instead of leaving a gap.
-                    const span = i === list.length - 1 && list.length % 2 === 1 ? 'sm:col-span-2' : ''
-                    return (
-                      <Reveal as="li" key={s.slug} delay={i * 60} className={span}>
-                        <Link href={`/services/${s.slug}`} className="card card-interactive group flex h-full flex-col p-7">
-                          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                            <Icon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                          <h4 className="mt-6 font-display text-xl font-semibold text-ink-950">{s.title}</h4>
-                          <p className="mt-2 flex-1 leading-relaxed text-ink-600">{s.short}</p>
-                          <span className="text-link mt-5 text-sm font-medium">
-                            Learn more<span className="sr-only"> about {s.title}</span>
-                            <ArrowRight className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                          </span>
-                        </Link>
-                      </Reveal>
-                    )
-                  })}
-              </ul>
-            </div>
-          ))}
-        </div>
+            )
+          })}
+        </ul>
       </Container>
     </section>
   )
