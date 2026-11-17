@@ -12,13 +12,13 @@ export default function CtaBand({
   return (
     <section className="section" aria-labelledby="cta-title">
       <Container>
-        <Reveal className="tile-dark overflow-hidden rounded-[28px] px-6 py-14 sm:px-12 sm:py-16 lg:px-16">
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+        <Reveal className="tile-aurora overflow-hidden rounded-[36px] px-6 py-16 text-center sm:px-12 sm:py-24 lg:px-16">
+          <div className="flex flex-col items-center gap-10">
             <div className="max-w-2xl">
-              <h2 id="cta-title" className="display-2 text-white">{title}</h2>
-              <p className="lede mt-5">{text}</p>
+              <h2 id="cta-title" className="display-2 text-gradient-cta">{title}</h2>
+              <p className="lede mx-auto mt-5 !text-ink-500">{text}</p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Link href={href} className="btn btn-primary btn-lg">
                 Start a conversation <ArrowRight className="arrow" aria-hidden="true" />
               </Link>
