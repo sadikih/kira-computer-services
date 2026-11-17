@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import Container from '../ui/Container'
 import Reveal from '../ui/Reveal'
-import { LogoMark } from '../ui/Logo'
+import { LiquidGlassLogo } from '../liquid-glass-logo'
 import { Link } from '../../lib/router'
 
 export default function AboutTeaser() {
@@ -10,9 +10,8 @@ export default function AboutTeaser() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-12">
           <Reveal className="relative order-last lg:order-first lg:col-span-5">
-            <div className="card relative flex aspect-[4/3] items-center justify-center overflow-hidden">
-              <div className="grid-bg absolute inset-0" aria-hidden="true" />
-              <LogoMark className="relative h-auto w-1/2 text-accent/80" />
+            <div className="card tile-aurora relative flex aspect-[4/3] items-center justify-center overflow-hidden">
+              <LiquidGlassLogo logo="/logo.svg" theme="light" depth={2.4} className="w-full" style={{ height: '70%' }} />
             </div>
           </Reveal>
           <Reveal delay={80} className="lg:col-span-6 lg:col-start-7">

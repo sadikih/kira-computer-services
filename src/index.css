@@ -5,21 +5,20 @@
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  /* Brand palette, taken from the logo: deep navy with the mark's cyan.
-     Every text pairing below meets WCAG AA on white and on --color-muted. */
+  /* Apple.com palette. The KiraTech cyan is kept for the mark on dark tiles. */
   --color-canvas: #ffffff;
   --color-surface: #ffffff;
-  --color-muted: #eef4f7; /* cool tinted tile / footer */
+  --color-muted: #f5f5f7; /* apple.com light-grey tile / footer */
 
-  --color-ink-950: #0b1f33; /* navy: headings, body, dark bands */
-  --color-ink-800: #16304a;
-  --color-ink-600: #3e5468;
-  --color-ink-500: #5a6d80; /* secondary copy */
+  --color-ink-950: #1d1d1f; /* headings, body */
+  --color-ink-800: #333336;
+  --color-ink-600: #424245;
+  --color-ink-500: #6e6e73; /* secondary copy */
 
-  --color-accent: #0e7490; /* teal links and icons */
-  --color-electric-600: #0e7490; /* button */
-  --color-electric-700: #155e75; /* button hover */
-  --color-brand: #5ee1ff; /* logo cyan, for use on navy only */
+  --color-accent: #0066cc; /* links */
+  --color-electric-600: #0071e3; /* button */
+  --color-electric-700: #0077ed; /* button hover */
+  --color-brand: #2997ff; /* link/icon blue on black */
 
   --color-success: #15803d;
   --color-danger: #e30000;
@@ -49,7 +48,7 @@ body {
 }
 
 ::selection {
-  background: #bdeefa;
+  background: #b3d7ff;
 }
 
 /* One focus style for every interactive element. */
@@ -89,9 +88,9 @@ svg {
   .display-2 {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.009em;
-    line-height: 1.1;
-    font-size: clamp(2rem, 1.7rem + 1.3vw, 3rem); /* 32 → 48px */
+    letter-spacing: -0.025em;
+    line-height: 1.06;
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 4rem); /* 36 → 64px */
     text-wrap: balance;
   }
   .lede {
@@ -134,7 +133,6 @@ svg {
   }
   .btn-primary:hover {
     background: var(--color-electric-700);
-    transform: translateY(-1px);
   }
   .btn-secondary {
     border-color: var(--color-electric-600);
@@ -167,16 +165,17 @@ svg {
 
   .card {
     background: var(--color-muted);
-    border: 1px solid rgb(11 31 51 / 0.06);
-    border-radius: 20px;
+    border-radius: 28px;
+  }
+  .bg-muted .card {
+    background: #fff;
   }
   .card-interactive {
     transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo);
   }
   .card-interactive:hover {
-    transform: translateY(-3px);
-    border-color: rgb(14 116 144 / 0.35);
-    box-shadow: 0 14px 30px -18px rgb(11 31 51 / 0.35);
+    transform: scale(1.015);
+    box-shadow: 0 30px 60px -30px rgb(0 40 120 / 0.3);
   }
   /* Translucent nav material */
   .glass {
@@ -186,41 +185,42 @@ svg {
   }
 
   .section {
-    padding-block: clamp(4rem, 2.5rem + 5vw, 6.5rem);
+    padding-block: clamp(5rem, 3rem + 7vw, 9rem);
   }
 
   /* Faint dot grid, used behind the hero and dark panels. */
   .grid-bg {
-    background-image: radial-gradient(rgb(14 116 144 / 0.16) 1px, transparent 1px);
+    background-image: radial-gradient(rgb(0 0 0 / 0.07) 1px, transparent 1px);
     background-size: 22px 22px;
     mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
   }
 
+  /* Bright glowing panel (CTA). */
+  .tile-aurora {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(60% 80% at 15% 20%, rgb(41 151 255 / 0.25), transparent 70%),
+      radial-gradient(50% 70% at 90% 90%, rgb(94 225 255 / 0.28), transparent 70%),
+      radial-gradient(40% 60% at 60% 0%, rgb(170 120 255 / 0.18), transparent 70%),
+      linear-gradient(180deg, #f5f9ff, #eef4ff);
+  }
+
   /* Navy panel with a cyan glow, in place of flat black. */
   .tile-dark {
-    background:
-      radial-gradient(120% 90% at 100% 0%, rgb(94 225 255 / 0.18), transparent 55%),
-      radial-gradient(90% 80% at 0% 100%, rgb(14 116 144 / 0.35), transparent 60%),
-      var(--color-ink-950);
-    color: #e6f1f7;
+    background: #000;
+    color: #f5f5f7;
   }
   .tile-dark .lede {
-    color: #b7c8d6;
-  }
-  .tile-dark .btn-primary {
-    background: var(--color-brand);
-    color: var(--color-ink-950);
-  }
-  .tile-dark .btn-primary:hover {
-    background: #8ae9ff;
+    color: #a1a1a6;
   }
   .tile-dark .btn-secondary {
-    border-color: rgb(94 225 255 / 0.6);
+    border-color: var(--color-brand);
     color: var(--color-brand);
   }
   .tile-dark .btn-secondary:hover {
     background: var(--color-brand);
-    color: var(--color-ink-950);
+    color: #000;
   }
 
 /* Form controls */
@@ -303,6 +303,375 @@ svg {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+}
+
+/* ---------------------------------------------------------------- liquid glass logo */
+
+.lgl {
+  container-type: size;
+  display: grid;
+  place-items: center;
+  max-width: 100%;
+  --rx: 0deg;
+  --ry: 0deg;
+}
+.lgl-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 4cqmin;
+  width: min(100cqw, 160cqh);
+  aspect-ratio: 1.6; /* the mark is wide, so no square box */
+  animation: lgl-drop 1.6s var(--ease-out-expo) both;
+}
+/* Coloured light spilling from behind the glass. */
+.lgl-tile::before {
+  content: "";
+  position: absolute;
+  inset: 5% 15%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(41 151 255 / 0.55), rgb(94 225 255 / 0.18) 55%, transparent);
+  filter: blur(40px);
+  animation: lgl-breathe 6s ease-in-out infinite;
+}
+.lgl-light .lgl-tile::before { opacity: 0.6; }
+.lgl-float {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  perspective: 1100px;
+  animation: lgl-float 7s ease-in-out 1.6s infinite;
+}
+.lgl-active .lgl-float { animation-play-state: paused; }
+.lgl-mark {
+  position: relative;
+  width: 82%;
+  aspect-ratio: 427 / 294;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.9s var(--ease-out-expo);
+}
+.lgl-active .lgl-mark { transition-duration: 0.25s; }
+.lgl-layer {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+.lgl-shadow {
+  background: rgb(0 113 227 / 0.45);
+  filter: blur(26px);
+}
+.lgl-dark .lgl-shadow { background: rgb(0 0 0 / 0.8); }
+/* The glass edge: deep blue, darker toward the back. */
+.lgl-side { background: linear-gradient(135deg, rgb(120 190 255 / 0.22), rgb(0 70 180 / 0.3)); }
+.lgl-dark .lgl-side { background: linear-gradient(135deg, #3d8ef0, #0b2a66); }
+/* Clear glass: a hard-edged sky reflection over a translucent blue body. */
+.lgl-face {
+  background:
+    linear-gradient(168deg, rgb(255 255 255 / 0.95) 0%, rgb(255 255 255 / 0.55) 33%, rgb(255 255 255 / 0) 34%),
+    linear-gradient(135deg, rgb(170 220 255 / 0.55) 0%, rgb(41 151 255 / 0.55) 50%, rgb(0 90 220 / 0.75) 100%);
+}
+.lgl-dark .lgl-face {
+  background:
+    radial-gradient(60% 80% at 20% 10%, rgb(255 255 255 / 0.85), transparent 55%),
+    linear-gradient(135deg, #bfe6ff 0%, #4fb0ff 35%, #1a6dff 70%, #5ee1ff 100%);
+}
+/* No mix-blend-mode on these: it flattens the 3D stack in Chrome. */
+/* Specular highlight that follows the pointer. */
+.lgl-spec {
+  background: radial-gradient(30% 45% at var(--gx, 30%) var(--gy, 20%), rgb(255 255 255 / 0.55), transparent 70%);
+}
+/* Colour dispersion at the rim. */
+.lgl-rim {
+  background: linear-gradient(135deg, rgb(255 120 200 / 0.3), transparent 20%, transparent 80%, rgb(120 255 220 / 0.3));
+}
+.lgl-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 7cqmin;
+  letter-spacing: -0.02em;
+}
+.lgl-light .lgl-text { color: var(--color-ink-950); }
+.lgl-dark .lgl-text { color: #f5f5f7; }
+
+@keyframes lgl-drop {
+  0% { transform: scale(0.3) translateY(40px); opacity: 0; filter: blur(20px); }
+  60% { transform: scale(1.04); opacity: 1; filter: none; }
+  100% { transform: none; }
+}
+@keyframes lgl-float {
+  0%, 100% { transform: translateY(0) rotateX(6deg) rotateY(-14deg); }
+  50% { transform: translateY(-14px) rotateX(-4deg) rotateY(14deg); }
+}
+@keyframes lgl-breathe {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* ---------------------------------------------------------------- pro hero */
+
+.hero-pro {
+  background: linear-gradient(180deg, #fbfbfd 0%, #f0f5ff 55%, #fbfbfd 100%);
+  color: var(--color-ink-950);
+}
+/* Slow aurora behind everything. */
+.hero-aurora {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 120%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 35% at 28% 55%, rgb(41 151 255 / 0.22), transparent 70%),
+    radial-gradient(35% 30% at 74% 45%, rgb(94 225 255 / 0.22), transparent 70%),
+    radial-gradient(30% 25% at 50% 80%, rgb(170 120 255 / 0.14), transparent 70%);
+  filter: blur(30px);
+  animation: aurora 18s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  from { transform: translate3d(-4%, 0, 0) scale(1); }
+  to { transform: translate3d(4%, -3%, 0) scale(1.1); }
+}
+/* Headline line comes into focus out of a blur. */
+@keyframes focus-in {
+  from { opacity: 0; filter: blur(14px); transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; filter: none; transform: none; }
+}
+.focus-in {
+  animation: focus-in 1.1s var(--ease-out-expo) both;
+  animation-delay: var(--delay, 0ms);
+}
+/* Slow-moving gradient through the second line. */
+.shimmer-text {
+  background: linear-gradient(100deg, #0a4fb8, #0071e3 25%, #00a3d9 45%, #6e5bff 65%, #0071e3 82%, #0a4fb8);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: focus-in 1.1s var(--ease-out-expo) both, shimmer 9s linear infinite;
+  animation-delay: var(--delay, 0ms), 0s;
+}
+@keyframes shimmer {
+  to { background-position: -250% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lgl-mark { transform: none; }
+}
+
+/* ---------------------------------------------------------------- scroll story */
+
+.lgl-part {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.story {
+  position: relative;
+  background: #fbfbfd;
+}
+/* Static fallback: assembled mark, pillars in a row. */
+.story-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1.5rem 5rem;
+  text-align: center;
+}
+.story-logo { width: 100%; }
+.story-captions {
+  display: grid;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 64rem;
+}
+@media (min-width: 640px) {
+  .story-captions { grid-template-columns: repeat(3, 1fr); }
+}
+.story-ring { display: none; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .story {
+      height: 330vh;
+      view-timeline-name: --story;
+    }
+    .story-stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      padding-block: 1rem 2rem;
+      gap: 1rem;
+    }
+    .story-captions {
+      position: relative;
+      display: block;
+      height: 12rem;
+    }
+    .story-caption {
+      position: absolute;
+      inset: 0 0 auto;
+      animation: caption linear both;
+      animation-timeline: --story;
+    }
+    .story-caption:nth-child(1) { animation-range: contain 0% contain 32%; }
+    .story-caption:nth-child(2) { animation-range: contain 32% contain 62%; }
+    .story-caption:nth-child(3) { animation-name: caption-last; animation-range: contain 62% contain 92%; }
+
+    /* The two links drift in from opposite sides and lock together. */
+    .story .lgl-part {
+      animation: part-a linear both;
+      animation-timeline: --story;
+      animation-range: contain 0% contain 62%;
+    }
+    .story .lgl-part:nth-child(2) { animation-name: part-b; }
+
+    /* The snap: a pulse of light and a ring of energy. */
+    .story-logo {
+      animation: snap linear both;
+      animation-timeline: --story;
+      animation-range: contain 58% contain 74%;
+    }
+    .story-ring {
+      display: block;
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      width: min(560px, 80vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid rgb(0 113 227 / 0.5);
+      box-shadow: 0 0 60px rgb(41 151 255 / 0.45), inset 0 0 60px rgb(94 225 255 / 0.35);
+      translate: -50% -50%;
+      pointer-events: none;
+      animation: ring linear both;
+      animation-timeline: --story;
+      animation-range: contain 60% contain 80%;
+    }
+  }
+}
+@keyframes caption {
+  0% { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+  22%, 78% { opacity: 1; transform: none; filter: none; }
+  100% { opacity: 0; transform: translateY(-40px); filter: blur(10px); }
+}
+@keyframes caption-last {
+  0% { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+  30%, 100% { opacity: 1; transform: none; filter: none; }
+}
+@keyframes part-a {
+  from { transform: translate3d(-42%, 10%, -80px) rotateZ(-28deg) rotateY(45deg); }
+  to { transform: none; }
+}
+@keyframes part-b {
+  from { transform: translate3d(42%, -10%, -80px) rotateZ(28deg) rotateY(-45deg); }
+  to { transform: none; }
+}
+@keyframes snap {
+  0%, 100% { transform: none; filter: none; }
+  35% { transform: scale(1.07); filter: brightness(1.2) saturate(1.2); }
+}
+@keyframes ring {
+  0% { opacity: 0; transform: scale(0.35); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* ---------------------------------------------------------------- home sections */
+
+/* Static gradient for big numerals. */
+.text-gradient {
+  background: linear-gradient(120deg, #0a4fb8, #0071e3 40%, #00a3d9 70%, #6e5bff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gradient-cta {
+  background: linear-gradient(110deg, #1d1d1f 30%, #0071e3 70%, #00a3d9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Bento service tile: a blue glow blooms from the corner on hover. */
+.bento {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.bento::after {
+  content: "";
+  position: absolute;
+  inset: auto -30% -60% auto;
+  width: 80%;
+  aspect-ratio: 1;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(41 151 255 / 0.22), transparent);
+  transition: transform 0.6s var(--ease-out-expo), opacity 0.6s var(--ease-out-expo);
+  opacity: 0.5;
+}
+.bento:hover::after {
+  transform: scale(1.4);
+  opacity: 1;
+}
+.icon-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  color: #fff;
+  background: linear-gradient(145deg, #5ab4ff, #0071e3 60%, #0a4fb8);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.6), 0 10px 20px -10px rgb(0 113 227 / 0.7);
+}
+/* Process line that fills as you scroll. */
+.process-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #0071e3, #00a3d9, #6e5bff);
+  transform-origin: left;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .process-line {
+      animation: fill-line linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 55%;
+    }
+  }
+}
+@keyframes fill-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+/* Technology ticker: two rows sliding in opposite directions. */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee-track > li { padding-right: 0.75rem; } /* not gap: keeps the two halves equal for a seamless loop */
+.marquee-reverse .marquee-track { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { flex-wrap: wrap; width: auto; justify-content: center; animation: none; }
+  .marquee-track [aria-hidden] { display: none; }
 }
 
 /* ---------------------------------------------------------------- motion */
