@@ -2,6 +2,7 @@ import Seo from '../components/ui/Seo'
 import { organizationLd } from '../lib/structuredData'
 import CtaBand from '../components/ui/CtaBand'
 import Hero from '../components/sections/Hero'
+import Story from '../components/sections/Story'
 import Services from '../components/sections/Services'
 import WhyKira from '../components/sections/WhyKira'
 import Process from '../components/sections/Process'
@@ -24,6 +25,7 @@ export default function Home() {
         }}
       />
       <Hero />
+      <Story />
       <Services />
       <WhyKira />
       <Process />
