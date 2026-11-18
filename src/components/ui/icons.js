@@ -1,12 +1,23 @@
-import { CodeXml, Globe, ShieldCheck, Network, Cloud, Database, Compass } from 'lucide-react'
+import {
+  LayoutDashboard, BrainCircuit, Workflow, Cloud, ShieldCheck, Globe, Network,
+  HeartPulse, Landmark, HandHeart, Truck, Building2,
+} from 'lucide-react'
 
 // Maps the `icon` keys used in src/data/content.js to icon components.
 export const serviceIcons = {
-  code: CodeXml,
-  globe: Globe,
-  shield: ShieldCheck,
-  network: Network,
+  systems: LayoutDashboard,
+  ai: BrainCircuit,
+  integration: Workflow,
   cloud: Cloud,
-  data: Database,
-  compass: Compass,
+  shield: ShieldCheck,
+  globe: Globe,
+  network: Network,
+}
+
+export const industryIcons = {
+  health: HeartPulse,
+  regulatory: Landmark,
+  ngo: HandHeart,
+  retail: Truck,
+  enterprise: Building2,
 }

@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react'
 import { getSupabase, isSupabaseConfigured } from './supabaseClient'
 import { projects as staticProjects } from '../data/content'
 
-/** True when there is (or may be) at least one case study to show. */
-export const hasWork = staticProjects.length > 0 || isSupabaseConfigured
-
 /**
  * Case studies from the Supabase `projects` table when configured, otherwise
  * the static list in content.js. `error` is set if the remote load fails.

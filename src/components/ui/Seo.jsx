@@ -5,7 +5,7 @@ import { siteInfo } from '../../data/content'
  * prerender step (scripts/prerender.js) writes them into each static page.
  */
 export default function Seo({ title, description = siteInfo.description, path = '/', noindex = false, jsonLd }) {
-  const fullTitle = title ? `${title} | ${siteInfo.name}` : `${siteInfo.name} | Software, Cybersecurity & Networking in Nairobi`
+  const fullTitle = title ? `${title} | ${siteInfo.name}` : `${siteInfo.name} | Engineering Intelligent Business Systems`
   const url = siteInfo.url + path
   const image = `${siteInfo.url}/og-image.png`
 
@@ -24,7 +24,7 @@ export default function Seo({ title, description = siteInfo.description, path = 
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content="KiraTech — software, cybersecurity and networking, Nairobi" />
+      <meta property="og:image:alt" content="KiraTech — Engineering Intelligent Business Systems" />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />

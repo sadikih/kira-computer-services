@@ -9,7 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 const serverEntry = path.join(root, 'dist-server', 'entry-server.js')
 
-const { render, staticRoutes, siteInfo, services } = await import(serverEntry)
+const { render, staticRoutes, siteInfo, services, industries } = await import(serverEntry)
 const template = await fs.readFile(path.join(dist, 'index.html'), 'utf8')
 
 // React 19 emits hoisted <title>/<meta>/<link> tags first; move them into <head>.
@@ -53,9 +53,14 @@ Location: ${siteInfo.location}. Email: ${siteInfo.email}. Phone: ${siteInfo.phon
 
 ${services.map((s) => `- [${s.title}](${siteInfo.url}/services/${s.slug}): ${s.short}`).join('\n')}
 
+## Industries
+
+${industries.map((i) => `- [${i.title}](${siteInfo.url}/industries#${i.slug}): ${i.summary}`).join('\n')}
+
 ## Company
 
 - [About](${siteInfo.url}/about)
+- [Projects](${siteInfo.url}/work)
 - [Contact](${siteInfo.url}/contact)
 
 ## Optional

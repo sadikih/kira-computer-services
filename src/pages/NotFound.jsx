@@ -8,11 +8,10 @@ export default function NotFound() {
   return (
     <>
       <Seo title="Page not found" noindex />
-      <section className="relative isolate overflow-hidden pt-40 pb-32 sm:pt-48">
-        <div className="grid-bg pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
+      <section className="pt-40 pb-32 sm:pt-48">
         <Container>
           <p className="eyebrow">Error 404</p>
-          <h1 className="display-1 mt-5 max-w-3xl text-ink-950">We couldn’t find that page.</h1>
+          <h1 className="display-1 mt-5 max-w-3xl">We couldn’t find that page.</h1>
           <p className="lede mt-6 max-w-xl">
             The link may be out of date, or the address may have been mistyped. These pages
             might help instead:
@@ -25,7 +24,7 @@ export default function NotFound() {
             <Link href="/contact" className="btn btn-secondary btn-lg">Contact us</Link>
           </div>
           <p className="mt-10 text-sm text-ink-500">
-            Need help? Call <a href={siteInfo.phoneHref} className="text-ink-800 underline underline-offset-4">{siteInfo.phone}</a>.
+            Need help? Call <a href={siteInfo.phoneHref} className="text-ink-950 underline underline-offset-4">{siteInfo.phone}</a>.
           </p>
         </Container>
       </section>

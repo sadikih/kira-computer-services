@@ -14,7 +14,7 @@ export default function Portfolio() {
     <section id="work" className="section" aria-labelledby="work-title">
       <Container>
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-          <SectionHeading id="work-title" eyebrow="Work" title="Recent projects." />
+          <SectionHeading id="work-title" eyebrow="Projects" title="Recent work." />
           <Link href="/work" className="text-link shrink-0">
             All projects <ArrowRight aria-hidden="true" />
           </Link>

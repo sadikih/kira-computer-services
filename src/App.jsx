@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import AboutPage from './pages/AboutPage'
 import ServicesPage from './pages/ServicesPage'
 import ServicePage from './pages/ServicePage'
+import IndustriesPage from './pages/IndustriesPage'
 import WorkPage from './pages/WorkPage'
 import ProjectPage from './pages/ProjectPage'
 import ContactPage from './pages/ContactPage'
@@ -18,6 +19,7 @@ const routes = [
   ['/about', AboutPage],
   ['/services', ServicesPage],
   ['/services/:slug', ServicePage],
+  ['/industries', IndustriesPage],
   ['/work', WorkPage],
   ['/work/:slug', ProjectPage],
   ['/contact', ContactPage],
@@ -41,7 +43,7 @@ export default function App() {
     <>
       <a
         href="#main-content"
-        className="sr-only rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
+        className="sr-only rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
       >
         Skip to content
       </a>

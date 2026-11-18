@@ -1,5 +1,11 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/services/software-development", "destination": "/services/business-systems-engineering", "permanent": true },
+    { "source": "/services/ai-data-solutions", "destination": "/services/ai-workflow-automation", "permanent": true },
+    { "source": "/services/cloud-solutions", "destination": "/services/cloud-devops", "permanent": true },
+    { "source": "/services/it-consulting", "destination": "/services", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

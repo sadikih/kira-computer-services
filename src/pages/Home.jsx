@@ -2,13 +2,13 @@ import Seo from '../components/ui/Seo'
 import { organizationLd } from '../lib/structuredData'
 import CtaBand from '../components/ui/CtaBand'
 import Hero from '../components/sections/Hero'
-import Story from '../components/sections/Story'
+import CoreService from '../components/sections/CoreService'
 import Services from '../components/sections/Services'
-import WhyKira from '../components/sections/WhyKira'
+import Industries from '../components/sections/Industries'
+import Capabilities from '../components/sections/Capabilities'
 import Process from '../components/sections/Process'
 import TechStack from '../components/sections/TechStack'
 import Portfolio from '../components/sections/Portfolio'
-import AboutTeaser from '../components/sections/AboutTeaser'
 import { siteInfo } from '../data/content'
 
 export default function Home() {
@@ -25,13 +25,13 @@ export default function Home() {
         }}
       />
       <Hero />
-      <Story />
+      <CoreService />
       <Services />
-      <WhyKira />
+      <Industries />
+      <Capabilities />
+      <Portfolio />
       <Process />
       <TechStack />
-      <Portfolio />
-      <AboutTeaser />
       <CtaBand />
     </>
   )

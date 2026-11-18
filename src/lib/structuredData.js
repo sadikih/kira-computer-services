@@ -11,7 +11,8 @@ export const organizationLd = {
   email: siteInfo.email,
   telephone: '+254112796092',
   address: { '@type': 'PostalAddress', addressLocality: 'Nairobi', addressCountry: 'KE' },
-  areaServed: { '@type': 'Country', name: 'Kenya' },
+  areaServed: [{ '@type': 'Country', name: 'Kenya' }, { '@type': 'Place', name: 'Worldwide' }],
+  slogan: siteInfo.tagline,
   knowsAbout: services.map((s) => s.title),
 }
 
